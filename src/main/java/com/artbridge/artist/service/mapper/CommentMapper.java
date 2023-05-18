@@ -1,8 +1,6 @@
 package com.artbridge.artist.service.mapper;
 
-import com.artbridge.artist.domain.Artist;
 import com.artbridge.artist.domain.Comment;
-import com.artbridge.artist.service.dto.ArtistDTO;
 import com.artbridge.artist.service.dto.CommentDTO;
 import org.mapstruct.*;
 
@@ -11,11 +9,11 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface CommentMapper extends EntityMapper<CommentDTO, Comment> {
-    @Mapping(target = "artwork", source = "artwork", qualifiedByName = "artistId")
-    CommentDTO toDto(Comment s);
+    @Mapping(target = "artistDTO", source = "artist")
+    @Mapping(target = "memberDTO", source = "member")
+    CommentDTO toDto(Comment comment);
 
-    @Named("artistId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    ArtistDTO toDtoArtistId(Artist artist);
+    @Mapping(target = "artist", source = "artistDTO")
+    @Mapping(target = "member", source = "memberDTO")
+    Comment toEntity(CommentDTO commentDTO);
 }
