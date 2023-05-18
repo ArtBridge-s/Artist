@@ -1,12 +1,10 @@
-FROM gradle:7.5.1-jdk17 AS build
-COPY --chown=gradle:gradle . /home/gradle/src
-WORKDIR /home/gradle/src
-RUN gradle build --no-daemon
+# Stage 1: Build with Maven
+FROM maven:3.8.3-openjdk-17 AS build
+COPY src /usr/src/app/src
+COPY pom.xml /usr/src/app
+RUN mvn -f /usr/src/app/pom.xml clean package
 
+# Stage 2: Run with OpenJDK
 FROM openjdk:17-jdk-alpine
-
-RUN mkdir /app
-
-COPY --from=build /home/gradle/src/build/libs/*.jar /app/
-
+COPY --from=build /usr/src/app/target/*.jar /app/
 ENTRYPOINT ["java","-jar","/app/artist.jar"]
