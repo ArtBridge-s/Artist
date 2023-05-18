@@ -2,35 +2,29 @@ name: Docker Image CI - DEV
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "citest" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Docker meta
-        id: docker_meta
-        uses: docker/metadata-action@v3
-        with:
-          images: imkunyoung/a-artist-dev
-          tag-semver: |
-            {{version}}
-            {{major}}.{{minor}}
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and push
-        uses: docker/build-push-action@v2
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Build and push
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: ./ci.Dockerfile
-          platforms: linux/amd64
           push: true
-          tags: imkunyoung/a-artist-dev:1.0
-          labels: ${{ steps.docker_meta.outputs.labels }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/a-artist:latest
