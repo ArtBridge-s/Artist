@@ -2,12 +2,16 @@ package com.artbridge.artist.domain;
 
 import com.artbridge.artist.domain.enumeration.Status;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.*;
+import lombok.*;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * A Artist.
@@ -16,6 +20,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table(name = "artist")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 public class Artist implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -54,35 +62,26 @@ public class Artist implements Serializable {
     @OneToMany(mappedBy = "artwork")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "artwork" }, allowSetters = true)
+    @ToString.Exclude
     private Set<Comment> comments = new HashSet<>();
 
     @OneToMany(mappedBy = "artwork")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "artwork" }, allowSetters = true)
+    @ToString.Exclude
     private Set<View> views = new HashSet<>();
 
     @OneToMany(mappedBy = "artwork")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "artwork" }, allowSetters = true)
+    @ToString.Exclude
     private Set<Like> likes = new HashSet<>();
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
 
-    public Long getId() {
-        return this.id;
-    }
 
     public Artist id(Long id) {
         this.setId(id);
         return this;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return this.name;
     }
 
     public Artist name(String name) {
@@ -90,25 +89,9 @@ public class Artist implements Serializable {
         return this;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getRealName() {
-        return this.realName;
-    }
-
     public Artist realName(String realName) {
         this.setRealName(realName);
         return this;
-    }
-
-    public void setRealName(String realName) {
-        this.realName = realName;
-    }
-
-    public String getImgUrl() {
-        return this.imgUrl;
     }
 
     public Artist imgUrl(String imgUrl) {
@@ -116,25 +99,9 @@ public class Artist implements Serializable {
         return this;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
-    }
-
-    public String getPhone() {
-        return this.phone;
-    }
-
     public Artist phone(String phone) {
         this.setPhone(phone);
         return this;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getCareer() {
-        return this.career;
     }
 
     public Artist career(String career) {
@@ -142,25 +109,9 @@ public class Artist implements Serializable {
         return this;
     }
 
-    public void setCareer(String career) {
-        this.career = career;
-    }
-
-    public String getVoArtwork() {
-        return this.voArtwork;
-    }
-
     public Artist voArtwork(String voArtwork) {
         this.setVoArtwork(voArtwork);
         return this;
-    }
-
-    public void setVoArtwork(String voArtwork) {
-        this.voArtwork = voArtwork;
-    }
-
-    public String getVoMember() {
-        return this.voMember;
     }
 
     public Artist voMember(String voMember) {
@@ -168,25 +119,9 @@ public class Artist implements Serializable {
         return this;
     }
 
-    public void setVoMember(String voMember) {
-        this.voMember = voMember;
-    }
-
-    public Status getStatus() {
-        return this.status;
-    }
-
     public Artist status(Status status) {
         this.setStatus(status);
         return this;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public Set<Comment> getComments() {
-        return this.comments;
     }
 
     public void setComments(Set<Comment> comments) {
@@ -199,10 +134,6 @@ public class Artist implements Serializable {
         this.comments = comments;
     }
 
-    public Artist comments(Set<Comment> comments) {
-        this.setComments(comments);
-        return this;
-    }
 
     public Artist addComments(Comment comment) {
         this.comments.add(comment);
@@ -214,10 +145,6 @@ public class Artist implements Serializable {
         this.comments.remove(comment);
         comment.setArtwork(null);
         return this;
-    }
-
-    public Set<View> getViews() {
-        return this.views;
     }
 
     public void setViews(Set<View> views) {
@@ -247,10 +174,6 @@ public class Artist implements Serializable {
         return this;
     }
 
-    public Set<Like> getLikes() {
-        return this.likes;
-    }
-
     public void setLikes(Set<Like> likes) {
         if (this.likes != null) {
             this.likes.forEach(i -> i.setArtwork(null));
@@ -278,38 +201,16 @@ public class Artist implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
-
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Artist)) {
-            return false;
-        }
-        return id != null && id.equals(((Artist) o).id);
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Artist artist = (Artist) o;
+        return getId() != null && Objects.equals(getId(), artist.getId());
     }
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
-    }
-
-    // prettier-ignore
-    @Override
-    public String toString() {
-        return "Artist{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", realName='" + getRealName() + "'" +
-            ", imgUrl='" + getImgUrl() + "'" +
-            ", phone='" + getPhone() + "'" +
-            ", career='" + getCareer() + "'" +
-            ", voArtwork='" + getVoArtwork() + "'" +
-            ", voMember='" + getVoMember() + "'" +
-            ", status='" + getStatus() + "'" +
-            "}";
     }
 }
