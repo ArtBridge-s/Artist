@@ -1,0 +1,42 @@
+entity Artist {
+    name String,
+    realName String,
+    imgUrl String,
+    phone String,
+    career String,
+    voArtwork String,
+    voMember String,
+    status Status,
+}
+
+entity Comment {
+    voMember Long,
+    content String,
+}
+
+entity View {
+    voMember Long,
+}
+
+entity Like {
+    voMember Long,
+}
+
+enum Status {
+    UPLOAD_PENDING, REVISION_PENDING, DELETE_PENDING, OK
+}
+
+relationship OneToMany {
+    Artist{comments} to Comment{artwork}
+    Artist{views} to View{artwork}
+    Artist{likes} to Like{artwork}
+}
+
+paginate Comment, Like, View with infinite-scroll
+paginate Artist with pagination
+
+// Use Data Transfert Objects (DTO)
+dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl
