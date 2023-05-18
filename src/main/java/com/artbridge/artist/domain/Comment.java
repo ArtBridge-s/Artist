@@ -46,7 +46,7 @@ public class Comment implements Serializable {
         return this;
     }
 
-    public Comment voMember(Member member) {
+    public Comment member(Member member) {
         this.setMember(member);
         return this;
     }

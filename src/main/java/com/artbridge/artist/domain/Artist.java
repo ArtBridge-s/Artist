@@ -113,7 +113,7 @@ public class Artist implements Serializable {
         return this;
     }
 
-    public Artist voMember(Member member) {
+    public Artist member(Member member) {
         this.setMember(member);
         return this;
     }
@@ -147,10 +147,10 @@ public class Artist implements Serializable {
 
     public void setViews(Set<View> views) {
         if (this.views != null) {
-            this.views.forEach(i -> i.setArtwork(null));
+            this.views.forEach(i -> i.setArtist(null));
         }
         if (views != null) {
-            views.forEach(i -> i.setArtwork(this));
+            views.forEach(i -> i.setArtist(this));
         }
         this.views = views;
     }
@@ -162,13 +162,13 @@ public class Artist implements Serializable {
 
     public Artist addViews(View view) {
         this.views.add(view);
-        view.setArtwork(this);
+        view.setArtist(this);
         return this;
     }
 
     public Artist removeViews(View view) {
         this.views.remove(view);
-        view.setArtwork(null);
+        view.setArtist(null);
         return this;
     }
 
