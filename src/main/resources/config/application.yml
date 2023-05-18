@@ -209,7 +209,7 @@ spring:
       console-available: true
 
 server:
-  port: 8081
+  port: 8001
   servlet:
     session:
       cookie:
