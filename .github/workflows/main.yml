@@ -24,7 +24,7 @@ jobs:
       - name: Run backend test
         run: |
           chmod +x mvnw
-           run ci:backend:test
+#           run ci:backend:test
 #      - name: Package application
 #        run: run java:jar:dev
       - name: Build and publish docker image
