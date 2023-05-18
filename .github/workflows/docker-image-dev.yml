@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Docker meta
         id: docker_meta
-        uses: docker/metadata-action@v3
+        uses: actions/checkout@v3
         with:
           images: imkunyoung/a-artist-dev
           tag-semver: |
