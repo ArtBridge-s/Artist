@@ -18,6 +18,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Getter
 @Setter
+@ToString
 @RequiredArgsConstructor
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class View implements Serializable {
@@ -50,11 +51,6 @@ public class View implements Serializable {
     public View artist(Artist artist) {
         this.setArtist(artist);
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "View{" + "id=" + getId() + ", voMember=" + getMember() + "}";
     }
 
     @Override
