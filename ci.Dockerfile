@@ -6,5 +6,5 @@ RUN mvn -f /usr/src/app/pom.xml clean package
 
 # Stage 2: Run with OpenJDK
 FROM openjdk:17-jdk-alpine
-COPY --from=build /usr/src/app/target/*.jar /app/
+COPY --from=build /usr/src/app/target/*.jar /app/target/
 ENTRYPOINT ["java","-jar","/app/artist.jar"]
