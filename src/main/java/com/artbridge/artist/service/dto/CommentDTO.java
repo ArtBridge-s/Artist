@@ -11,7 +11,7 @@ import lombok.Data;
 public class CommentDTO implements Serializable {
 
     private Long id;
-    private Long voMember;
+    private MemberDTO memberDTO;
     private String content;
-    private ArtistDTO artwork;
+    private ArtistDTO artistDTO;
 }

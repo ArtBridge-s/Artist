@@ -1,14 +1,14 @@
 package com.artbridge.artist.domain;
 
+import com.artbridge.artist.domain.valueobject.Member;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.io.Serializable;
+import java.util.Objects;
+import javax.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * A Comment.
@@ -31,27 +31,23 @@ public class Comment implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "vo_member")
-    private Long voMember;
+    @Embedded
+    private Member member;
 
     @Column(name = "content")
     private String content;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "comments", "views", "likes" }, allowSetters = true)
-    private Artist artwork;
-
-
-
-
+    private Artist artist;
 
     public Comment id(Long id) {
         this.setId(id);
         return this;
     }
 
-    public Comment voMember(Long voMember) {
-        this.setVoMember(voMember);
+    public Comment voMember(Member member) {
+        this.setMember(member);
         return this;
     }
 
@@ -61,10 +57,9 @@ public class Comment implements Serializable {
     }
 
     public Comment artwork(Artist artist) {
-        this.setArtwork(artist);
+        this.setArtist(artist);
         return this;
     }
-
 
     @Override
     public boolean equals(Object o) {
