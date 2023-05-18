@@ -1,5 +1,11 @@
-name: Application CI
-on: [push, pull_request]
+name: Application CI - DEV
+
+on:
+  push:
+    branches:
+      - develop
+
+
 jobs:
   pipeline:
     name: Artist pipeline
