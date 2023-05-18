@@ -24,9 +24,9 @@ jobs:
       - name: Run backend test
         run: |
           chmod +x mvnw
-#           run ci:backend:test
-      - name: Package application
-        run: run java:jar:dev
+           run ci:backend:test
+#      - name: Package application
+#        run: run java:jar:dev
       - name: Build and publish docker image
         if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/'))
         run: |
