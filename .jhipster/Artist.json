@@ -1,0 +1,71 @@
+{
+  "applications": "*",
+  "changelogDate": "20230518013257",
+  "clientRootFolder": "Artist",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "artist",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "realName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "imgUrl",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "phone",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "career",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "voArtwork",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "voMember",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "Status",
+      "fieldValues": "UPLOAD_PENDING,REVISION_PENDING,DELETE_PENDING,OK"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "microserviceName": "Artist",
+  "name": "Artist",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "comment",
+      "otherEntityRelationshipName": "artwork",
+      "relationshipName": "comments",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "view",
+      "otherEntityRelationshipName": "artwork",
+      "relationshipName": "views",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "like",
+      "otherEntityRelationshipName": "artwork",
+      "relationshipName": "likes",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

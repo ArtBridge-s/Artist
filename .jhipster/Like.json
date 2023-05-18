@@ -1,0 +1,30 @@
+{
+  "applications": "*",
+  "changelogDate": "20230518013300",
+  "clientRootFolder": "Artist",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "jhi_like",
+  "fields": [
+    {
+      "fieldName": "voMember",
+      "fieldType": "Long"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "microserviceName": "Artist",
+  "name": "Like",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "artist",
+      "otherEntityRelationshipName": "likes",
+      "relationshipName": "artwork",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceImpl"
+}
