@@ -24,4 +24,4 @@ jobs:
         run: |
           chmod +x mvnw
           ./mvnw clean compile
-          ./mvnw jib:build -Djib.to.image=imkunyoung/a-artist-dev${DOCKER_TAG} -Djib.to.auth.username="${{secrets.DOCKERHUB_USERNAME }}" -Djib.to.auth.password="${{secrets.DOCKERHUB_PASSWORD }}" -Pdev
+          ./mvnw jib:build -Djib.to.image=imkunyoung/a-artist-dev${DOCKER_TAG} -Djib.to.auth.username="${{secrets.DOCKERHUB_TOKEN }}" -Djib.to.auth.password="${{secrets.DOCKERHUB_PASSWORD }}" -Pdev
