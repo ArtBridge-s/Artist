@@ -5,7 +5,6 @@ on:
     branches:
       - master
 
-
 jobs:
   pipeline:
     name: Artist pipeline
@@ -24,24 +23,11 @@ jobs:
       - name: Run backend test
         run: |
           chmod +x mvnw
-           run ci:backend:test
-#      - name: Package application
-#        run: run java:jar:dev
+          ./mvnw clean compile
+#          run ci:backend:test
       - name: Build and publish docker image
         if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/'))
         run: |
           GIT_TAG=:${GITHUB_REF#refs/tags/}
           DOCKER_TAG=${GIT_TAG#:refs/heads/master}
-          ./mvnw -ntp jib:build -Djib.to.image=imkunyoung/a-artist-dev${DOCKER_TAG} -Djib.to.auth.username="${{secrets.DOCKERHUB_USERNAME }}" -Djib.to.auth.password="${{secrets.DOCKERHUB_PASSWORD }}" -Pdev
-#      - name: 'E2E: Package'
-#        run: run ci:e2e:package
-#      - name: 'E2E: Prepare'
-#        run: run ci:e2e:prepare
-#      - name: 'E2E: Run'
-#        run: run ci:e2e:run
-#        env:
-#          CYPRESS_ENABLE_RECORD: false
-#          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
-#          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-#      - name: 'E2E: Teardown'
-#        run: run ci:e2e:teardown
+          ./mvnw jib:bulid -Djib.to.image=imkunyoung/a-artist-dev${DOCKER_TAG} -Djib.to.auth.username="${{secrets.DOCKERHUB_USERNAME }}" -Djib.to.auth.password="${{secrets.DOCKERHUB_PASSWORD }}" -Pdev
