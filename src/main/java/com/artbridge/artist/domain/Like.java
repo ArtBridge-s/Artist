@@ -1,5 +1,6 @@
 package com.artbridge.artist.domain;
 
+import com.artbridge.artist.domain.valueobject.Member;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.Objects;
@@ -30,8 +31,8 @@ public class Like implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "vo_member")
-    private Long voMember;
+    @Embedded
+    private Member member;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "comments", "views", "likes" }, allowSetters = true)
@@ -42,8 +43,8 @@ public class Like implements Serializable {
         return this;
     }
 
-    public Like voMember(Long voMember) {
-        this.setVoMember(voMember);
+    public Like member(Member member) {
+        this.setMember(member);
         return this;
     }
 
