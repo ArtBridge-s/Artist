@@ -51,7 +51,7 @@ public class Artist implements Serializable {
     private String career;
 
     @Embedded
-    private Member member;
+    private Member createdMember;
 
     @Embedded
     private Artwork artwork;
@@ -114,7 +114,7 @@ public class Artist implements Serializable {
     }
 
     public Artist member(Member member) {
-        this.setMember(member);
+        this.setCreatedMember(member);
         return this;
     }
 

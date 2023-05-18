@@ -17,7 +17,7 @@ public class ArtistDTO implements Serializable {
     private String imgUrl;
     private String phone;
     private String career;
-    private String voArtwork;
-    private String voMember;
+    private ArtworkDTO artworkDTO;
+    private MemberDTO memberDTO;
     private Status status;
 }
