@@ -1,17 +1,18 @@
 package com.artbridge.artist.domain;
 
 import com.artbridge.artist.domain.enumeration.Status;
+import com.artbridge.artist.domain.valueobject.Artwork;
+import com.artbridge.artist.domain.valueobject.Member;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
-import org.hibernate.Hibernate;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.*;
+import lombok.*;
+import org.hibernate.Hibernate;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A Artist.
@@ -49,35 +50,33 @@ public class Artist implements Serializable {
     @Column(name = "career")
     private String career;
 
-    @Column(name = "vo_artwork")
-    private String voArtwork;
+    @Embedded
+    private Member member;
 
-    @Column(name = "vo_member")
-    private String voMember;
+    @Embedded
+    private Artwork artwork;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;
 
-    @OneToMany(mappedBy = "artwork")
+    @OneToMany(mappedBy = "artist")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "artwork" }, allowSetters = true)
     @ToString.Exclude
     private Set<Comment> comments = new HashSet<>();
 
-    @OneToMany(mappedBy = "artwork")
+    @OneToMany(mappedBy = "artist")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "artwork" }, allowSetters = true)
     @ToString.Exclude
     private Set<View> views = new HashSet<>();
 
-    @OneToMany(mappedBy = "artwork")
+    @OneToMany(mappedBy = "artist")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "artwork" }, allowSetters = true)
     @ToString.Exclude
     private Set<Like> likes = new HashSet<>();
-
-
 
     public Artist id(Long id) {
         this.setId(id);
@@ -109,13 +108,13 @@ public class Artist implements Serializable {
         return this;
     }
 
-    public Artist voArtwork(String voArtwork) {
-        this.setVoArtwork(voArtwork);
+    public Artist voArtwork(Artwork artwork) {
+        this.setArtwork(artwork);
         return this;
     }
 
-    public Artist voMember(String voMember) {
-        this.setVoMember(voMember);
+    public Artist voMember(Member member) {
+        this.setMember(member);
         return this;
     }
 
@@ -126,24 +125,23 @@ public class Artist implements Serializable {
 
     public void setComments(Set<Comment> comments) {
         if (this.comments != null) {
-            this.comments.forEach(i -> i.setArtwork(null));
+            this.comments.forEach(i -> i.setArtist(null));
         }
         if (comments != null) {
-            comments.forEach(i -> i.setArtwork(this));
+            comments.forEach(i -> i.setArtist(this));
         }
         this.comments = comments;
     }
 
-
     public Artist addComments(Comment comment) {
         this.comments.add(comment);
-        comment.setArtwork(this);
+        comment.setArtist(this);
         return this;
     }
 
     public Artist removeComments(Comment comment) {
         this.comments.remove(comment);
-        comment.setArtwork(null);
+        comment.setArtist(null);
         return this;
     }
 
@@ -176,10 +174,10 @@ public class Artist implements Serializable {
 
     public void setLikes(Set<Like> likes) {
         if (this.likes != null) {
-            this.likes.forEach(i -> i.setArtwork(null));
+            this.likes.forEach(i -> i.setArtist(null));
         }
         if (likes != null) {
-            likes.forEach(i -> i.setArtwork(this));
+            likes.forEach(i -> i.setArtist(this));
         }
         this.likes = likes;
     }
@@ -191,13 +189,13 @@ public class Artist implements Serializable {
 
     public Artist addLikes(Like like) {
         this.likes.add(like);
-        like.setArtwork(this);
+        like.setArtist(this);
         return this;
     }
 
     public Artist removeLikes(Like like) {
         this.likes.remove(like);
-        like.setArtwork(null);
+        like.setArtist(null);
         return this;
     }
 
