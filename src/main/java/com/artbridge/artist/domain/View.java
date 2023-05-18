@@ -1,5 +1,6 @@
 package com.artbridge.artist.domain;
 
+import com.artbridge.artist.domain.valueobject.Member;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.*;
@@ -24,11 +25,11 @@ public class View implements Serializable {
     private Long id;
 
     @Column(name = "vo_member")
-    private Long voMember;
+    private Member member;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "comments", "views", "likes" }, allowSetters = true)
-    private Artist artwork;
+    private Artist artist;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -45,25 +46,25 @@ public class View implements Serializable {
         this.id = id;
     }
 
-    public Long getVoMember() {
-        return this.voMember;
+    public Member getMember() {
+        return this.member;
     }
 
-    public View voMember(Long voMember) {
-        this.setVoMember(voMember);
+    public View voMember(Member member) {
+        this.setMember(member);
         return this;
     }
 
-    public void setVoMember(Long voMember) {
-        this.voMember = voMember;
+    public void setMember(Member member) {
+        this.member = member;
     }
 
     public Artist getArtwork() {
-        return this.artwork;
+        return this.artist;
     }
 
     public void setArtwork(Artist artist) {
-        this.artwork = artist;
+        this.artist = artist;
     }
 
     public View artwork(Artist artist) {
@@ -95,7 +96,7 @@ public class View implements Serializable {
     public String toString() {
         return "View{" +
             "id=" + getId() +
-            ", voMember=" + getVoMember() +
+            ", voMember=" + getMember() +
             "}";
     }
 }
