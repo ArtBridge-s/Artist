@@ -3,7 +3,7 @@ name: Application CI - DEV
 on:
   push:
     branches:
-      - develop
+      - master
 
 
 jobs:
