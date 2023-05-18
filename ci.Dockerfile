@@ -5,6 +5,6 @@ COPY pom.xml /usr/src/app
 RUN mvn -f /usr/src/app/pom.xml clean package
 
 # Stage 2: Run with OpenJDK
-FROM openjdk:11-jdk-alpine
+FROM openjdk:11-jre-slim
 COPY --from=build /usr/src/app/target/*.jar /app/
 ENTRYPOINT ["java","-jar","/app/artist-0.0.1-SNAPSHOT.jar"]
