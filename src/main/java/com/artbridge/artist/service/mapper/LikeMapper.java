@@ -1,8 +1,6 @@
 package com.artbridge.artist.service.mapper;
 
-import com.artbridge.artist.domain.Artist;
 import com.artbridge.artist.domain.Like;
-import com.artbridge.artist.service.dto.ArtistDTO;
 import com.artbridge.artist.service.dto.LikeDTO;
 import org.mapstruct.*;
 
@@ -11,11 +9,11 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface LikeMapper extends EntityMapper<LikeDTO, Like> {
-    @Mapping(target = "artwork", source = "artwork", qualifiedByName = "artistId")
-    LikeDTO toDto(Like s);
+    @Mapping(target = "artistDTO", source = "artist")
+    @Mapping(target = "memberDTO", source = "member")
+    LikeDTO toDto(Like like);
 
-    @Named("artistId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    ArtistDTO toDtoArtistId(Artist artist);
+    @Mapping(target = "artist", source = "artistDTO")
+    @Mapping(target = "member", source = "memberDTO")
+    Like toEntity(LikeDTO likeDTO);
 }

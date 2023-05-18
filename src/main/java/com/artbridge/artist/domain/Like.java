@@ -36,20 +36,20 @@ public class Like implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "comments", "views", "likes" }, allowSetters = true)
-    private Artist artwork;
+    private Artist artist;
 
     public Like id(Long id) {
         this.setId(id);
         return this;
     }
 
-    public Like member(Member member) {
+    public Like voMember(Member member) {
         this.setMember(member);
         return this;
     }
 
     public Like artwork(Artist artist) {
-        this.setArtwork(artist);
+        this.setArtist(artist);
         return this;
     }
 
