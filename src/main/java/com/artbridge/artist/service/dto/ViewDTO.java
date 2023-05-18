@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class ViewDTO implements Serializable {
 
     private Long id;
-    private Long voMember;
-    private ArtistDTO artwork;
+    private MemberDTO memberDTO;
+    private ArtistDTO artistDTO;
 
 }

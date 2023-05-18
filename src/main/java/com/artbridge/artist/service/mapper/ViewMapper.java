@@ -1,8 +1,10 @@
 package com.artbridge.artist.service.mapper;
 
 import com.artbridge.artist.domain.Artist;
+import com.artbridge.artist.domain.Like;
 import com.artbridge.artist.domain.View;
 import com.artbridge.artist.service.dto.ArtistDTO;
+import com.artbridge.artist.service.dto.LikeDTO;
 import com.artbridge.artist.service.dto.ViewDTO;
 import org.mapstruct.*;
 
@@ -11,11 +13,12 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface ViewMapper extends EntityMapper<ViewDTO, View> {
-    @Mapping(target = "artwork", source = "artwork", qualifiedByName = "artistId")
-    ViewDTO toDto(View s);
 
-    @Named("artistId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    ArtistDTO toDtoArtistId(Artist artist);
+    @Mapping(target = "artistDTO", source = "artist")
+    @Mapping(target = "memberDTO", source = "member")
+    ViewDTO toDto(View view);
+
+    @Mapping(target = "artist", source = "artistDTO")
+    @Mapping(target = "member", source = "memberDTO")
+    View toEntity(ViewDTO viewDTO);
 }
