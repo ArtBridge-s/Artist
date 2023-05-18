@@ -43,7 +43,7 @@ public class Like implements Serializable {
         return this;
     }
 
-    public Like voMember(Member member) {
+    public Like member(Member member) {
         this.setMember(member);
         return this;
     }
