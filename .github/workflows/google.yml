@@ -22,7 +22,7 @@ env:
   GKE_CLUSTER: artbridge-cluster    # TODO: update to cluster name
   GKE_ZONE: us-central1   # TODO: update to cluster zone
   DEPLOYMENT_NAME: artist # TODO: update to deployment name
-  REPOSITORY: a-artist # TODO: update to Artifact Registry docker repository
+  REPOSITORY: artbridge # TODO: update to Artifact Registry docker repository
   IMAGE: a-artist
 
 jobs:
