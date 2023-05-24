@@ -39,6 +39,12 @@ spring:
     livereload:
       enabled: false
   cloud:
+    gcp:
+      project-id: artbridge
+      storage:
+        credentials:
+          location: classpath:config/artbridge-234c412b01cf.json
+        bucket: artbridge-bucket
     config:
       retry:
         initial-interval: 1000
