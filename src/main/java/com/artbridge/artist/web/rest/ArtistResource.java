@@ -163,6 +163,13 @@ public class ArtistResource {
             .build();
     }
 
+    /**
+     * Artist의 유효성을 검사합니다.
+     *
+     * @param id Artist의 식별자(ID)
+     * @param artistDTO Artist의 정보를 담은 ArtistDTO 객체
+     * @throws BadRequestAlertException Artist의 유효성 검사에 실패한 경우 발생하는 BadRequestAlertException
+     */
     private void validateArtist(Long id, ArtistDTO artistDTO) {
         if (artistDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
