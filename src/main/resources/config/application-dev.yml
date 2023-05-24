@@ -15,10 +15,10 @@
 
 logging:
   level:
-    ROOT: DEBUG
-    tech.jhipster: DEBUG
-    org.hibernate.SQL: DEBUG
-    com.artbridge.artist: DEBUG
+    ROOT: info
+    tech.jhipster: info
+    org.hibernate.SQL: info
+    com.artbridge.artist: info
 
 eureka:
   instance:
@@ -38,6 +38,12 @@ spring:
     serialization:
       indent-output: true
   cloud:
+    gcp:
+      project-id: artbridge
+      storage:
+        credentials:
+          location: classpath:config/artbridge-234c412b01cf.json
+        bucket: artbridge-bucket
     config:
       uri: http://admin:${jhipster.registry.password}@localhost:8761/config
       # name of the config server's property source (file.yml) that we want to use
