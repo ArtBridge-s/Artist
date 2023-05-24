@@ -82,16 +82,8 @@ public class ArtistResource {
         @RequestBody ArtistDTO artistDTO
     ) throws URISyntaxException {
         log.debug("REST request to update Artist : {}, {}", id, artistDTO);
-        if (artistDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, artistDTO.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
 
-        if (!artistRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
+        this.validateArtist(id, artistDTO);
 
         ArtistDTO result = artistService.update(artistDTO);
         return ResponseEntity
@@ -117,16 +109,8 @@ public class ArtistResource {
         @RequestBody ArtistDTO artistDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update Artist partially : {}, {}", id, artistDTO);
-        if (artistDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, artistDTO.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
 
-        if (!artistRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
+        this.validateArtist(id, artistDTO);
 
         Optional<ArtistDTO> result = artistService.partialUpdate(artistDTO);
 
@@ -177,5 +161,17 @@ public class ArtistResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    private void validateArtist(Long id, ArtistDTO artistDTO) {
+        if (artistDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, artistDTO.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+        if (!artistRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
     }
 }
