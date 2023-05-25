@@ -91,4 +91,5 @@ public interface ArtistService {
      */
     Page<ArtistDTO> findUpdatePendings(Pageable pageable);
 
+    Page<ArtistDTO> findDeletePendings(Pageable pageable);
 }
