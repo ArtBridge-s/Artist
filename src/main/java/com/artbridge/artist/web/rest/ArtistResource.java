@@ -74,7 +74,7 @@ public class ArtistResource {
      * @throws URISyntaxException URI 구문 오류가 발생한 경우
      * @throws JsonProcessingException JSON 처리 오류가 발생한 경우
      */
-    @PostMapping
+    @PostMapping("/artists")
     public ResponseEntity<ArtistDTO> createArtist(
         @RequestParam("image") MultipartFile file,
         @RequestParam("artistDTO") String artistDTOStr
