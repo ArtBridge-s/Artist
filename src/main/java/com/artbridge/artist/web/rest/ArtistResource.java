@@ -197,6 +197,12 @@ public class ArtistResource {
     }
 
 
+    /**
+     * {@code GET /artists/pending/deletes} : 관리자 권한이 있는 경우 삭제 대기 중인 Artist 목록을 페이지별로 조회합니다.
+     *
+     * @param pageable 페이지 정보 (Pageable)
+     * @return 페이지별로 조회된 삭제 대기 중인 Artist 목록을 담은 ResponseEntity
+     */
     @GetMapping("/artists/pending/deletes")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<List<ArtistDTO>> getDeletePendings(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
