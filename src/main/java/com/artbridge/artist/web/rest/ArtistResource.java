@@ -71,7 +71,7 @@ public class ArtistResource {
      * @throws URISyntaxException URI 구문 오류가 발생한 경우
      * @throws JsonProcessingException JSON 처리 오류가 발생한 경우
      */
-    @PostMapping("/artists")
+    @PostMapping("/artists") /*TODO*/
     public ResponseEntity<ArtistDTO> createArtist(@RequestParam("image") MultipartFile file, @RequestParam("artistDTO") String artistDTOStr) throws URISyntaxException, JsonProcessingException {
         ArtistDTO artistDTO = this.convertToDTO(artistDTOStr);
 
@@ -94,15 +94,14 @@ public class ArtistResource {
             .body(result);
     }
 
+
     /**
-     * {@code PUT  /artists/:id} : Updates an existing artist.
+     * {@code PUT  /artists/:id} : 아티스트 정보를 업데이트합니다.
      *
-     * @param id the id of the artistDTO to save.
-     * @param artistDTO the artistDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated artistDTO,
-     * or with status {@code 400 (Bad Request)} if the artistDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the artistDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param id         업데이트할 아티스트의 ID (Long)
+     * @param artistDTO  업데이트할 아티스트 정보 (ArtistDTO)
+     * @return 업데이트된 아티스트의 정보를 담은 ResponseEntity를 반환합니다.
+     * @throws URISyntaxException URI 구문 예외가 발생할 경우
      */
     @PutMapping("/artists/{id}")
     public ResponseEntity<ArtistDTO> updateArtist(@PathVariable(value = "id", required = false) final Long id, @RequestBody ArtistDTO artistDTO) throws URISyntaxException {
