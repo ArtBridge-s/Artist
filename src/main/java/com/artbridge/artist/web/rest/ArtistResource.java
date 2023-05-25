@@ -2,8 +2,8 @@ package com.artbridge.artist.web.rest;
 
 import com.artbridge.artist.adapter.GCSService;
 import com.artbridge.artist.domain.Artist;
-import com.artbridge.artist.domain.valueobject.Artwork;
 import com.artbridge.artist.repository.ArtistRepository;
+import com.artbridge.artist.security.AuthoritiesConstants;
 import com.artbridge.artist.security.SecurityUtils;
 import com.artbridge.artist.security.jwt.TokenProvider;
 import com.artbridge.artist.service.ArtistService;
@@ -70,10 +70,10 @@ public class ArtistResource {
     /**
      * {@code POST  /artists} : 아티스트를 생성합니다.
      *
-     * @param file 이미지 파일 (MultipartFile)
+     * @param file         이미지 파일 (MultipartFile)
      * @param artistDTOStr 아티스트 정보 (JSON 문자열)
      * @return 생성된 아티스트의 정보를 담은 ArtistDTO 객체
-     * @throws URISyntaxException URI 구문 오류가 발생한 경우
+     * @throws URISyntaxException      URI 구문 오류가 발생한 경우
      * @throws JsonProcessingException JSON 처리 오류가 발생한 경우
      */
     @PostMapping("/artists")
@@ -105,8 +105,8 @@ public class ArtistResource {
     /**
      * {@code PUT  /artists/:id} : 아티스트 정보를 업데이트합니다.
      *
-     * @param id         업데이트할 아티스트의 ID (Long)
-     * @param artistDTO  업데이트할 아티스트 정보 (ArtistDTO)
+     * @param id        업데이트할 아티스트의 ID (Long)
+     * @param artistDTO 업데이트할 아티스트 정보 (ArtistDTO)
      * @return 업데이트된 아티스트의 정보를 담은 ResponseEntity를 반환합니다.
      * @throws URISyntaxException URI 구문 예외가 발생할 경우
      */
@@ -131,7 +131,7 @@ public class ArtistResource {
     /**
      * {@code PATCH  /artists/:id} : Partial updates given fields of an existing artist, field will ignore if it is null
      *
-     * @param id the id of the artistDTO to save.
+     * @param id        the id of the artistDTO to save.
      * @param artistDTO the artistDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated artistDTO,
      * or with status {@code 400 (Bad Request)} if the artistDTO is not valid,
@@ -184,25 +184,38 @@ public class ArtistResource {
     }
 
     /**
-     * {@code DELETE  /artists/:id} : delete the "id" artist.
+     * {@code DELETE  /artists/:id} : 아티스트 정보를 삭제합니다.
      *
-     * @param id the id of the artistDTO to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     * @param id        삭제할 아티스트의 ID (Long)
+     * @param artistDTO 삭제할 아티스트 정보 (ArtistDTO)
+     * @return 삭제된 아티스트의 정보를 담은 ResponseEntity를 반환합니다.
      */
-    @DeleteMapping("/artists/{id}")
-    public ResponseEntity<Void> deleteArtist(@PathVariable Long id) {
+    @DeleteMapping("/artists/{id}") /*TODO: - REFACTOR 로직 떼어낼 것*/
+    public ResponseEntity<ArtistDTO> deleteArtist(@PathVariable Long id, @RequestBody ArtistDTO artistDTO) {
         log.debug("REST request to delete Artist : {}", id);
-        artistService.delete(id);
+
+        this.validateId(id, artistDTO);
+        this.validateArtistExists(id);
+
+        if (SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
+            artistService.delete(id);
+            return ResponseEntity
+                .noContent()
+                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+                .build();
+        }
+
+        ArtistDTO result = artistService.deletePending(artistDTO);
         return ResponseEntity
-            .noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-            .build();
+            .ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, artistDTO.getId().toString()))
+            .body(result);
     }
 
     /**
      * 업로드된 이미지 파일을 처리하여 ArtistDTO에 이미지 URL을 설정합니다.
      *
-     * @param file       업로드된 이미지 파일
+     * @param file      업로드된 이미지 파일
      * @param artistDTO ArtistDTO 객체
      * @throws BadRequestAlertException 파일 업로드 실패 시 발생하는 예외
      */
@@ -259,8 +272,8 @@ public class ArtistResource {
     /**
      * 주어진 id와 ArtistDTO의 id를 검증합니다.
      *
-     * @param id           검증할 id
-     * @param artistDTO   검증할 ArtistDTO 객체
+     * @param id        검증할 id
+     * @param artistDTO 검증할 ArtistDTO 객체
      * @throws BadRequestAlertException ArtistDTO의 id가 null인 경우 또는 주어진 id와 ArtistDTO 의 id가 다른 경우 발생합니다.
      */
     private void validateId(Long id, ArtistDTO artistDTO) {
