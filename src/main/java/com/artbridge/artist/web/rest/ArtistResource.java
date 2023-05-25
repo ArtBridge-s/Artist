@@ -136,6 +136,22 @@ public class ArtistResource {
         return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, artistDTO.getId().toString()));
     }
 
+    @PatchMapping(value = "/artists/{id}/authorized/ok")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<ArtistDTO> authorizeOkArtwork(@PathVariable(value = "id", required = false) final Long id) {
+        log.debug("REST request to authorize ok Artwork : {}", id);
+
+        if (!artistRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        this.validateArtistExists(id);
+
+        ArtistDTO result = artistService.authorizeOkArtist(id);
+
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, id.toString())).body(result);
+    }
+
     /**
      * {@code GET  /artists} : 모든 아티스트 정보를 페이지별로 조회합니다.
      *
