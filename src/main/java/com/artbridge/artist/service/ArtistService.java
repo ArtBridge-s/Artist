@@ -100,5 +100,11 @@ public interface ArtistService {
      */
     Page<ArtistDTO> findDeletePendings(Pageable pageable);
 
+    /**
+     * 승인된 아티스트로 변경합니다.
+     *
+     * @param id 아티스트 ID
+     * @return 변경된 아티스트 정보 (ArtistDTO)
+     */
     ArtistDTO authorizeOkArtist(Long id);
 }
