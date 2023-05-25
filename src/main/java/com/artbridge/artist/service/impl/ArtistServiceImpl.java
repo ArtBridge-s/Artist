@@ -1,6 +1,7 @@
 package com.artbridge.artist.service.impl;
 
 import com.artbridge.artist.domain.Artist;
+import com.artbridge.artist.domain.enumeration.Status;
 import com.artbridge.artist.repository.ArtistRepository;
 import com.artbridge.artist.service.ArtistService;
 import com.artbridge.artist.service.dto.ArtistDTO;
@@ -35,6 +36,7 @@ public class ArtistServiceImpl implements ArtistService {
     public ArtistDTO save(ArtistDTO artistDTO) {
         log.debug("Request to save Artist : {}", artistDTO);
         Artist artist = artistMapper.toEntity(artistDTO);
+        artist.setStatus(Status.UPLOAD_PENDING);
         artist = artistRepository.save(artist);
         return artistMapper.toDto(artist);
     }
