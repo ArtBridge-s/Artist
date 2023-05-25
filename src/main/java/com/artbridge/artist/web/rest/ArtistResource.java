@@ -8,16 +8,14 @@ import com.artbridge.artist.service.ArtistService;
 import com.artbridge.artist.service.dto.ArtistDTO;
 import com.artbridge.artist.service.dto.MemberDTO;
 import com.artbridge.artist.web.rest.errors.BadRequestAlertException;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,7 +53,12 @@ public class ArtistResource {
 
     private final GCSService gcsService;
 
-    public ArtistResource(ArtistService artistService, ArtistRepository artistRepository, TokenProvider tokenProvider, GCSService gcsService) {
+    public ArtistResource(
+        ArtistService artistService,
+        ArtistRepository artistRepository,
+        TokenProvider tokenProvider,
+        GCSService gcsService
+    ) {
         this.artistService = artistService;
         this.artistRepository = artistRepository;
         this.tokenProvider = tokenProvider;
@@ -72,7 +75,10 @@ public class ArtistResource {
      * @throws JsonProcessingException JSON 처리 오류가 발생한 경우
      */
     @PostMapping
-    public ResponseEntity<ArtistDTO> createArtist(@RequestParam("image") MultipartFile file, @RequestParam("artistDTO") String artistDTOStr) throws URISyntaxException, JsonProcessingException { /*TODO: 엔드포인트 수정*/
+    public ResponseEntity<ArtistDTO> createArtist(
+        @RequestParam("image") MultipartFile file,
+        @RequestParam("artistDTO") String artistDTOStr
+    ) throws URISyntaxException, JsonProcessingException {/*TODO: 엔드포인트 수정*/
         ArtistDTO artistDTO = this.convertToDTO(artistDTOStr);
 
         log.debug("REST request to save Artist : {}", artistDTO);
@@ -191,13 +197,11 @@ public class ArtistResource {
             .build();
     }
 
-
-
     /**
      * 업로드된 이미지 파일을 처리하여 ArtistDTO에 이미지 URL을 설정합니다.
      *
      * @param file       업로드된 이미지 파일
-     * @param artistDTO ArtworkDTO 객체
+     * @param artistDTO ArtistDTO 객체
      * @throws BadRequestAlertException 파일 업로드 실패 시 발생하는 예외
      */
     private void uploadImage(MultipartFile file, ArtistDTO artistDTO) {
@@ -226,10 +230,8 @@ public class ArtistResource {
         return optToken.get();
     }
 
-
-
     /**
-     * ArtworkDTO를 JSON 문자열 표현에서 실제 ArtworkDTO 객체로 변환합니다.
+     * ArtistDTO를 JSON 문자열 표현에서 실제 ArtistDTO 객체로 변환합니다.
      *
      * @param artistDTOStr ArtistDTO의 JSON 문자열 표현
      * @return ArtistDTO 객체
@@ -239,7 +241,6 @@ public class ArtistResource {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(artistDTOStr, ArtistDTO.class);
     }
-
 
     /**
      * 주어진 토큰을 사용하여 MemberDTO 객체를 생성합니다.
