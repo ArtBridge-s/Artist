@@ -63,4 +63,6 @@ public interface ArtistService {
      * @return 삭제 대기 중으로 변경된 아티스트의 정보를 담은 ArtistDTO 객체
      */
     ArtistDTO deletePending(ArtistDTO artistDTO);
+
+    Page<ArtistDTO> findAllByStatus(Pageable pageable);
 }

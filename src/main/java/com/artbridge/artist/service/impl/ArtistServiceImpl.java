@@ -93,4 +93,10 @@ public class ArtistServiceImpl implements ArtistService {
         artist = artistRepository.save(artist);
         return artistMapper.toDto(artist);
     }
+
+    @Override
+    public Page<ArtistDTO> findAllByStatus(Pageable pageable) {
+        log.debug("Request to get all Artists by status");
+        return artistRepository.findAllByStatus(pageable, Status.OK).map(artistMapper::toDto);
+    }
 }
