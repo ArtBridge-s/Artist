@@ -2,8 +2,8 @@ package com.artbridge.artist.web.rest;
 
 import com.artbridge.artist.adapter.GCSService;
 import com.artbridge.artist.domain.Artist;
-import com.artbridge.artist.domain.valueobject.Artwork;
 import com.artbridge.artist.repository.ArtistRepository;
+import com.artbridge.artist.security.AuthoritiesConstants;
 import com.artbridge.artist.security.SecurityUtils;
 import com.artbridge.artist.security.jwt.TokenProvider;
 import com.artbridge.artist.service.ArtistService;
@@ -12,14 +12,12 @@ import com.artbridge.artist.service.dto.MemberDTO;
 import com.artbridge.artist.web.rest.errors.BadRequestAlertException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,7 +55,12 @@ public class ArtistResource {
 
     private final GCSService gcsService;
 
-    public ArtistResource(ArtistService artistService, ArtistRepository artistRepository, TokenProvider tokenProvider, GCSService gcsService) {
+    public ArtistResource(
+        ArtistService artistService,
+        ArtistRepository artistRepository,
+        TokenProvider tokenProvider,
+        GCSService gcsService
+    ) {
         this.artistService = artistService;
         this.artistRepository = artistRepository;
         this.tokenProvider = tokenProvider;
@@ -74,7 +77,10 @@ public class ArtistResource {
      * @throws JsonProcessingException JSON 처리 오류가 발생한 경우
      */
     @PostMapping("/artists")
-    public ResponseEntity<ArtistDTO> createArtist(@RequestParam("image") MultipartFile file, @RequestParam("artistDTO") String artistDTOStr) throws URISyntaxException, JsonProcessingException {
+    public ResponseEntity<ArtistDTO> createArtist(
+        @RequestParam("image") MultipartFile file,
+        @RequestParam("artistDTO") String artistDTOStr
+    ) throws URISyntaxException, JsonProcessingException {
         ArtistDTO artistDTO = this.convertToDTO(artistDTOStr);
 
         log.debug("REST request to save Artist : {}", artistDTO);
@@ -90,7 +96,10 @@ public class ArtistResource {
         this.uploadImage(file, artistDTO);
 
         ArtistDTO result = artistService.save(artistDTO);
-        return ResponseEntity.created(new URI("/api/artists/" + result.getId())).headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString())).body(result);
+        return ResponseEntity
+            .created(new URI("/api/artists/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
     }
 
     /**
@@ -102,7 +111,10 @@ public class ArtistResource {
      * @throws URISyntaxException URI 구문 예외가 발생할 경우
      */
     @PutMapping("/artists/{id}")
-    public ResponseEntity<ArtistDTO> updateArtist(@PathVariable(value = "id", required = false) final Long id, @RequestBody ArtistDTO artistDTO) throws URISyntaxException {
+    public ResponseEntity<ArtistDTO> updateArtist(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody ArtistDTO artistDTO
+    ) throws URISyntaxException {
         log.debug("REST request to update Artist : {}, {}", id, artistDTO);
 
         this.validateId(id, artistDTO);
@@ -110,7 +122,10 @@ public class ArtistResource {
         this.validateOwnership(artist);
 
         ArtistDTO result = artistService.update(artistDTO);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, artistDTO.getId().toString())).body(result);
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, artistDTO.getId().toString()))
+            .body(result);
     }
 
     /**
@@ -124,15 +139,21 @@ public class ArtistResource {
      * or with status {@code 500 (Internal Server Error)} if the artistDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/artists/{id}", consumes = {"application/json", "application/merge-patch+json"})
-    public ResponseEntity<ArtistDTO> partialUpdateArtist(@PathVariable(value = "id", required = false) final Long id, @RequestBody ArtistDTO artistDTO) throws URISyntaxException {
+    @PatchMapping(value = "/artists/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    public ResponseEntity<ArtistDTO> partialUpdateArtist(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody ArtistDTO artistDTO
+    ) throws URISyntaxException {
         log.debug("REST request to partial update Artist partially : {}, {}", id, artistDTO);
 
         this.validateId(id, artistDTO);
         this.validateArtistExists(id);
         Optional<ArtistDTO> result = artistService.partialUpdate(artistDTO);
 
-        return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, artistDTO.getId().toString()));
+        return ResponseUtil.wrapOrNotFound(
+            result,
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, artistDTO.getId().toString())
+        );
     }
 
     /**
@@ -169,10 +190,25 @@ public class ArtistResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/artists/{id}")
-    public ResponseEntity<Void> deleteArtist(@PathVariable Long id) {
+    public ResponseEntity<ArtistDTO> deleteArtist(@PathVariable Long id, @RequestBody ArtistDTO artistDTO) {
         log.debug("REST request to delete Artist : {}", id);
-        artistService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+
+        this.validateId(id, artistDTO);
+        this.validateArtistExists(id);
+
+        if (SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
+            artistService.delete(id);
+            return ResponseEntity
+                .noContent()
+                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+                .build();
+        }
+
+        ArtistDTO result = artistService.deletePending(artistDTO);
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, artistDTO.getId().toString()))
+            .body(result);
     }
 
     /**
