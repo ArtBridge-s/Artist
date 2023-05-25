@@ -1,5 +1,6 @@
 package com.artbridge.artist.web.rest;
 
+import com.artbridge.artist.adapter.GCSService;
 import com.artbridge.artist.repository.ArtistRepository;
 import com.artbridge.artist.service.ArtistService;
 import com.artbridge.artist.service.dto.ArtistDTO;
@@ -40,9 +41,12 @@ public class ArtistResource {
 
     private final ArtistRepository artistRepository;
 
-    public ArtistResource(ArtistService artistService, ArtistRepository artistRepository) {
+    private final GCSService gcsService;
+
+    public ArtistResource(ArtistService artistService, ArtistRepository artistRepository, GCSService gcsService) {
         this.artistService = artistService;
         this.artistRepository = artistRepository;
+        this.gcsService = gcsService;
     }
 
     /**
