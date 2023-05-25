@@ -165,6 +165,23 @@ public class ArtistResource {
 
 
     /**
+     * GET /artists/pendingList/creates : 이 엔드포인트는 Create 보류 중인 Artist의 페이지된 목록을 검색합니다.
+     *
+     * @param pageable 페이징 정보 (페이지 번호, 페이지 크기, 정렬)가 포함된 객체
+     * @return 상태 코드 200 (OK)와 몸체에 포함된 ArtistDTO 목록을 가진 ResponseEntity
+     * @throws IllegalArgumentException pageable 매개변수가 null인 경우 발생합니다.
+     */
+    @GetMapping("/artists/pending/creates")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<List<ArtistDTO>> getCreatePendings(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+        log.debug("REST request to get a page of Artworks");
+        Page<ArtistDTO> page = artistService.findCreatePendings(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+
+    /**
      * {@code GET /artists/pending/updates} : 관리자 권한이 있는 경우 업데이트 대기 중인 Artist 목록을 페이지별로 조회합니다.
      *
      * @param pageable 페이지 정보 (Pageable)

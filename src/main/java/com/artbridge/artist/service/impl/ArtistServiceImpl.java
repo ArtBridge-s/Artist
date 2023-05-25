@@ -105,4 +105,10 @@ public class ArtistServiceImpl implements ArtistService {
         log.debug("Request to get all Artists by status");
         return artistRepository.findAllByStatus(pageable, Status.REVISION_PENDING).map(artistMapper::toDto);
     }
+
+    @Override
+    public Page<ArtistDTO> findCreatePendings(Pageable pageable) {
+        log.debug("Request to get all Artists by status");
+        return artistRepository.findAllByStatus(pageable, Status.UPLOAD_PENDING).map(artistMapper::toDto);
+    }
 }
