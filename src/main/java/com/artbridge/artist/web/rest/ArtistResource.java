@@ -1,6 +1,8 @@
 package com.artbridge.artist.web.rest;
 
 import com.artbridge.artist.adapter.GCSService;
+import com.artbridge.artist.domain.Artist;
+import com.artbridge.artist.domain.valueobject.Artwork;
 import com.artbridge.artist.repository.ArtistRepository;
 import com.artbridge.artist.security.SecurityUtils;
 import com.artbridge.artist.security.jwt.TokenProvider;
@@ -66,7 +68,7 @@ public class ArtistResource {
     }
 
     /**
-     * 아티스트를 생성합니다.
+     * {@code POST  /artists} : 아티스트를 생성합니다.
      *
      * @param file 이미지 파일 (MultipartFile)
      * @param artistDTOStr 아티스트 정보 (JSON 문자열)
@@ -101,14 +103,12 @@ public class ArtistResource {
     }
 
     /**
-     * {@code PUT  /artists/:id} : Updates an existing artist.
+     * {@code PUT  /artists/:id} : 아티스트 정보를 업데이트합니다.
      *
-     * @param id the id of the artistDTO to save.
-     * @param artistDTO the artistDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated artistDTO,
-     * or with status {@code 400 (Bad Request)} if the artistDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the artistDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param id         업데이트할 아티스트의 ID (Long)
+     * @param artistDTO  업데이트할 아티스트 정보 (ArtistDTO)
+     * @return 업데이트된 아티스트의 정보를 담은 ResponseEntity를 반환합니다.
+     * @throws URISyntaxException URI 구문 예외가 발생할 경우
      */
     @PutMapping("/artists/{id}")
     public ResponseEntity<ArtistDTO> updateArtist(
@@ -117,7 +117,9 @@ public class ArtistResource {
     ) throws URISyntaxException {
         log.debug("REST request to update Artist : {}, {}", id, artistDTO);
 
-        this.validateArtist(id, artistDTO);
+        this.validateId(id, artistDTO);
+        Artist artist = this.validateArtistExists(id);
+        this.validateOwnership(artist);
 
         ArtistDTO result = artistService.update(artistDTO);
         return ResponseEntity
@@ -144,8 +146,8 @@ public class ArtistResource {
     ) throws URISyntaxException {
         log.debug("REST request to partial update Artist partially : {}, {}", id, artistDTO);
 
-        this.validateArtist(id, artistDTO);
-
+        this.validateId(id, artistDTO);
+        this.validateArtistExists(id);
         Optional<ArtistDTO> result = artistService.partialUpdate(artistDTO);
 
         return ResponseUtil.wrapOrNotFound(
@@ -255,21 +257,44 @@ public class ArtistResource {
     }
 
     /**
-     * Artist의 유효성을 검사합니다.
+     * 주어진 id와 ArtistDTO의 id를 검증합니다.
      *
-     * @param id Artist의 식별자(ID)
-     * @param artistDTO Artist의 정보를 담은 ArtistDTO 객체
-     * @throws BadRequestAlertException Artist의 유효성 검사에 실패한 경우 발생하는 BadRequestAlertException
+     * @param id           검증할 id
+     * @param artistDTO   검증할 ArtistDTO 객체
+     * @throws BadRequestAlertException ArtistDTO의 id가 null인 경우 또는 주어진 id와 ArtistDTO 의 id가 다른 경우 발생합니다.
      */
-    private void validateArtist(Long id, ArtistDTO artistDTO) {
+    private void validateId(Long id, ArtistDTO artistDTO) {
         if (artistDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         if (!Objects.equals(id, artistDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
-        if (!artistRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+    }
+
+    /**
+     * 주어진 id에 해당하는 Artist가 존재하는지 검증합니다.
+     *
+     * @param id 검증할 Artist의 식별자(ID)
+     * @return 주어진 id에 해당하는 Artist 객체
+     * @throws BadRequestAlertException Artist가 존재하지 않는 경우 발생합니다.
+     */
+    private Artist validateArtistExists(Long id) {
+        return artistRepository.findById(id).orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
+    }
+
+    /**
+     * 주어진 Artist의 소유권을 현재 사용자의 소유권과 비교하여 검증합니다.
+     *
+     * @param artist 소유권을 검증할 Artist 객체
+     * @throws BadRequestAlertException 현재 사용자가 Artwork의 소유자가 아닌 경우 발생합니다.
+     */
+    private void validateOwnership(Artist artist) {
+        String token = this.validateAndGetToken();
+        MemberDTO memberDTO = this.createMember(token);
+
+        if (!artist.getCreatedMember().getId().equals(memberDTO.getId())) {
+            throw new BadRequestAlertException("You are not the owner of this artwork", ENTITY_NAME, "notowner");
         }
     }
 }
