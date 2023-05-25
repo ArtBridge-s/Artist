@@ -18,10 +18,10 @@ public interface ArtistService {
     ArtistDTO save(ArtistDTO artistDTO);
 
     /**
-     * Updates a artist.
+     * 아티스트 정보를 업데이트합니다.
      *
-     * @param artistDTO the entity to update.
-     * @return the persisted entity.
+     * @param artistDTO 업데이트할 아티스트 정보 (ArtistDTO)
+     * @return 업데이트된 아티스트의 정보를 담은 ArtistDTO 객체
      */
     ArtistDTO update(ArtistDTO artistDTO);
 
