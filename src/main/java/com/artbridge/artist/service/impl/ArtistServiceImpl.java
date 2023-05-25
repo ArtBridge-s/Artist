@@ -84,4 +84,13 @@ public class ArtistServiceImpl implements ArtistService {
         log.debug("Request to delete Artist : {}", id);
         artistRepository.deleteById(id);
     }
+
+    @Override
+    public ArtistDTO deletePending(ArtistDTO artistDTO) {
+        log.debug("Request to delete pending Artist : {}", artistDTO);
+        Artist artist = artistMapper.toEntity(artistDTO);
+        artist.setStatus(Status.DELETE_PENDING);
+        artist = artistRepository.save(artist);
+        return artistMapper.toDto(artist);
+    }
 }
