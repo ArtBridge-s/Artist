@@ -136,10 +136,10 @@ public class ArtistResource {
     }
 
     /**
-     * {@code GET  /artists} : get all the artists.
+     * {@code GET  /artists} : 모든 아티스트 정보를 페이지별로 조회합니다.
      *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of artists in body.
+     * @param pageable 페이지 정보 (Pageable)
+     * @return 페이지별로 조회된 아티스트 정보를 담은 ResponseEntity 객체
      */
     @GetMapping("/artists")
     public ResponseEntity<List<ArtistDTO>> getAllArtists(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
@@ -169,7 +169,8 @@ public class ArtistResource {
      * @param artistDTO 삭제할 아티스트 정보 (ArtistDTO)
      * @return 삭제된 아티스트의 정보를 담은 ResponseEntity를 반환합니다.
      */
-    @DeleteMapping("/artists/{id}") /*TODO: - REFACTOR 로직 떼어낼 것*/ public ResponseEntity<ArtistDTO> deleteArtist(@PathVariable Long id, @RequestBody ArtistDTO artistDTO) {
+    @DeleteMapping("/artists/{id}") /*TODO: - REFACTOR 로직 떼어낼 것*/
+    public ResponseEntity<ArtistDTO> deleteArtist(@PathVariable Long id, @RequestBody ArtistDTO artistDTO) {
         log.debug("REST request to delete Artist : {}", id);
 
         this.validateId(id, artistDTO);
