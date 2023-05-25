@@ -164,6 +164,16 @@ public class ArtistResource {
     }
 
 
+    @GetMapping("/artists/pending/creates")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<List<ArtistDTO>> getCreatePendings(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+        log.debug("REST request to get a page of Artworks");
+        Page<ArtistDTO> page = artistService.findCreatePendings(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+
     /**
      * {@code GET /artists/pending/updates} : 관리자 권한이 있는 경우 업데이트 대기 중인 Artist 목록을 페이지별로 조회합니다.
      *
