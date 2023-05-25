@@ -91,4 +91,12 @@ public interface ArtistService {
      */
     Page<ArtistDTO> findUpdatePendings(Pageable pageable);
 
+
+    /**
+     * 삭제 대기 중인 아티스트 정보를 페이지별로 조회합니다.
+     *
+     * @param pageable 페이지 정보 (Pageable)
+     * @return 페이지별로 조회된 아티스트 정보를 담은 Page 객체
+     */
+    Page<ArtistDTO> findDeletePendings(Pageable pageable);
 }

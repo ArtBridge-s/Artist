@@ -196,6 +196,23 @@ public class ArtistResource {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
+
+    /**
+     * {@code GET /artists/pending/deletes} : 관리자 권한이 있는 경우 삭제 대기 중인 Artist 목록을 페이지별로 조회합니다.
+     *
+     * @param pageable 페이지 정보 (Pageable)
+     * @return 페이지별로 조회된 삭제 대기 중인 Artist 목록을 담은 ResponseEntity
+     */
+    @GetMapping("/artists/pending/deletes")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<List<ArtistDTO>> getDeletePendings(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+        log.debug("REST request to get a page of Artworks");
+        Page<ArtistDTO> page = artistService.findDeletePendings(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+
     /**
      * {@code DELETE  /artists/:id} : 아티스트 정보를 삭제합니다.
      *
