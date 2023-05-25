@@ -118,5 +118,16 @@ public class ArtistServiceImpl implements ArtistService {
         return artistRepository.findAllByStatus(pageable, Status.DELETE_PENDING).map(artistMapper::toDto);
     }
 
+    @Override
+    public ArtistDTO authorizeOkArtist(Long id) {
+        log.debug("Request to authorize ok artist : {}", id);
+        return artistRepository.findById(id)
+            .map(artist -> {
+                artist.setStatus(Status.OK);
+                return artistMapper.toDto(artistRepository.save(artist));
+            })
+            .orElseThrow();
+    }
+
 
 }

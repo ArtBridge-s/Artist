@@ -137,6 +137,29 @@ public class ArtistResource {
     }
 
     /**
+     * {@code PATCH /artists/{id}/authorized/ok} : Artist를 승인 처리합니다.
+     *
+     * @param id 승인할 Artist의 식별자(ID)
+     * @return 승인된 Artist의 정보를 담은 ResponseEntity
+     * @throws BadRequestAlertException Artist 승인 처리 실패 시 발생하는 BadRequestAlertException
+     */
+    @PatchMapping(value = "/artists/{id}/authorized/ok")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<ArtistDTO> authorizeOkArtists(@PathVariable(value = "id", required = false) final Long id) {
+        log.debug("REST request to authorize ok Artist : {}", id);
+
+        if (!artistRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        this.validateArtistExists(id);
+
+        ArtistDTO result = artistService.authorizeOkArtist(id);
+
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, id.toString())).body(result);
+    }
+
+    /**
      * {@code GET  /artists} : 모든 아티스트 정보를 페이지별로 조회합니다.
      *
      * @param pageable 페이지 정보 (Pageable)
@@ -174,7 +197,7 @@ public class ArtistResource {
     @GetMapping("/artists/pending/creates")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<List<ArtistDTO>> getCreatePendings(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
-        log.debug("REST request to get a page of Artworks");
+        log.debug("REST request to get a page of Artists");
         Page<ArtistDTO> page = artistService.findCreatePendings(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
@@ -190,7 +213,7 @@ public class ArtistResource {
     @GetMapping("/artists/pending/updates")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<List<ArtistDTO>> getUpdatePendings(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
-        log.debug("REST request to get a page of Artworks");
+        log.debug("REST request to get a page of Artists");
         Page<ArtistDTO> page = artistService.findUpdatePendings(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
@@ -206,7 +229,7 @@ public class ArtistResource {
     @GetMapping("/artists/pending/deletes")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<List<ArtistDTO>> getDeletePendings(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
-        log.debug("REST request to get a page of Artworks");
+        log.debug("REST request to get a page of Artists");
         Page<ArtistDTO> page = artistService.findDeletePendings(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
@@ -324,14 +347,14 @@ public class ArtistResource {
      * 주어진 Artist의 소유권을 현재 사용자의 소유권과 비교하여 검증합니다.
      *
      * @param artist 소유권을 검증할 Artist 객체
-     * @throws BadRequestAlertException 현재 사용자가 Artwork의 소유자가 아닌 경우 발생합니다.
+     * @throws BadRequestAlertException 현재 사용자가 Artists의 소유자가 아닌 경우 발생합니다.
      */
     private void validateOwnership(Artist artist) {
         String token = this.validateAndGetToken();
         MemberDTO memberDTO = this.createMember(token);
 
         if (!artist.getCreatedMember().getId().equals(memberDTO.getId())) {
-            throw new BadRequestAlertException("You are not the owner of this artwork", ENTITY_NAME, "notowner");
+            throw new BadRequestAlertException("You are not the owner of this artist", ENTITY_NAME, "notowner");
         }
     }
 }
