@@ -184,12 +184,13 @@ public class ArtistResource {
     }
 
     /**
-     * {@code DELETE  /artists/:id} : delete the "id" artist.
+     * {@code DELETE  /artists/:id} : 아티스트 정보를 삭제합니다.
      *
-     * @param id the id of the artistDTO to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     * @param id        삭제할 아티스트의 ID (Long)
+     * @param artistDTO 삭제할 아티스트 정보 (ArtistDTO)
+     * @return 삭제된 아티스트의 정보를 담은 ResponseEntity를 반환합니다.
      */
-    @DeleteMapping("/artists/{id}")
+    @DeleteMapping("/artists/{id}") /*TODO: - REFACTOR 로직 떼어낼 것*/
     public ResponseEntity<ArtistDTO> deleteArtist(@PathVariable Long id, @RequestBody ArtistDTO artistDTO) {
         log.debug("REST request to delete Artist : {}", id);
 
