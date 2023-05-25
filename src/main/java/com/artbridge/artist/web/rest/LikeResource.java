@@ -4,11 +4,13 @@ import com.artbridge.artist.repository.LikeRepository;
 import com.artbridge.artist.service.LikeService;
 import com.artbridge.artist.service.dto.LikeDTO;
 import com.artbridge.artist.web.rest.errors.BadRequestAlertException;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,16 +62,13 @@ public class LikeResource {
             throw new BadRequestAlertException("A new like cannot already have an ID", ENTITY_NAME, "idexists");
         }
         LikeDTO result = likeService.save(likeDTO);
-        return ResponseEntity
-            .created(new URI("/api/likes/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        return ResponseEntity.created(new URI("/api/likes/" + result.getId())).headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString())).body(result);
     }
 
     /**
      * {@code PUT  /likes/:id} : Updates an existing like.
      *
-     * @param id the id of the likeDTO to save.
+     * @param id      the id of the likeDTO to save.
      * @param likeDTO the likeDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated likeDTO,
      * or with status {@code 400 (Bad Request)} if the likeDTO is not valid,
@@ -77,8 +76,7 @@ public class LikeResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/likes/{id}")
-    public ResponseEntity<LikeDTO> updateLike(@PathVariable(value = "id", required = false) final Long id, @RequestBody LikeDTO likeDTO)
-        throws URISyntaxException {
+    public ResponseEntity<LikeDTO> updateLike(@PathVariable(value = "id", required = false) final Long id, @RequestBody LikeDTO likeDTO) throws URISyntaxException {
         log.debug("REST request to update Like : {}, {}", id, likeDTO);
         if (likeDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -92,16 +90,13 @@ public class LikeResource {
         }
 
         LikeDTO result = likeService.update(likeDTO);
-        return ResponseEntity
-            .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, likeDTO.getId().toString()))
-            .body(result);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, likeDTO.getId().toString())).body(result);
     }
 
     /**
      * {@code PATCH  /likes/:id} : Partial updates given fields of an existing like, field will ignore if it is null
      *
-     * @param id the id of the likeDTO to save.
+     * @param id      the id of the likeDTO to save.
      * @param likeDTO the likeDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated likeDTO,
      * or with status {@code 400 (Bad Request)} if the likeDTO is not valid,
@@ -109,11 +104,8 @@ public class LikeResource {
      * or with status {@code 500 (Internal Server Error)} if the likeDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/likes/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<LikeDTO> partialUpdateLike(
-        @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody LikeDTO likeDTO
-    ) throws URISyntaxException {
+    @PatchMapping(value = "/likes/{id}", consumes = {"application/json", "application/merge-patch+json"})
+    public ResponseEntity<LikeDTO> partialUpdateLike(@PathVariable(value = "id", required = false) final Long id, @RequestBody LikeDTO likeDTO) throws URISyntaxException {
         log.debug("REST request to partial update Like partially : {}, {}", id, likeDTO);
         if (likeDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -128,10 +120,7 @@ public class LikeResource {
 
         Optional<LikeDTO> result = likeService.partialUpdate(likeDTO);
 
-        return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, likeDTO.getId().toString())
-        );
+        return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, likeDTO.getId().toString()));
     }
 
     /**
@@ -171,9 +160,6 @@ public class LikeResource {
     public ResponseEntity<Void> deleteLike(@PathVariable Long id) {
         log.debug("REST request to delete Like : {}", id);
         likeService.delete(id);
-        return ResponseEntity
-            .noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-            .build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }
