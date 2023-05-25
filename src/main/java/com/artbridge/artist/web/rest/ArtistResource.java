@@ -63,11 +63,13 @@ public class ArtistResource {
     }
 
     /**
-     * {@code POST  /artists} : Create a new artist.
+     * 아티스트를 생성합니다.
      *
-     * @param artistDTO the artistDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new artistDTO, or with status {@code 400 (Bad Request)} if the artist has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param file 이미지 파일 (MultipartFile)
+     * @param artistDTOStr 아티스트 정보 (JSON 문자열)
+     * @return 생성된 아티스트의 정보를 담은 ArtistDTO 객체
+     * @throws URISyntaxException URI 구문 오류가 발생한 경우
+     * @throws JsonProcessingException JSON 처리 오류가 발생한 경우
      */
     @PostMapping
     public ResponseEntity<ArtistDTO> createArtist(@RequestParam("image") MultipartFile file, @RequestParam("artistDTO") String artistDTOStr) throws URISyntaxException, JsonProcessingException { /*TODO: 엔드포인트 수정*/
