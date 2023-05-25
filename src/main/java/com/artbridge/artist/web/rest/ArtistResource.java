@@ -55,7 +55,12 @@ public class ArtistResource {
 
     private final GCSService gcsService;
 
-    public ArtistResource(ArtistService artistService, ArtistRepository artistRepository, TokenProvider tokenProvider, GCSService gcsService) {
+    public ArtistResource(
+        ArtistService artistService,
+        ArtistRepository artistRepository,
+        TokenProvider tokenProvider,
+        GCSService gcsService
+    ) {
         this.artistService = artistService;
         this.artistRepository = artistRepository;
         this.tokenProvider = tokenProvider;
@@ -63,7 +68,7 @@ public class ArtistResource {
     }
 
     /**
-     * 아티스트를 생성합니다.
+     * {@code POST  /artists} : 아티스트를 생성합니다.
      *
      * @param file 이미지 파일 (MultipartFile)
      * @param artistDTOStr 아티스트 정보 (JSON 문자열)
@@ -71,8 +76,11 @@ public class ArtistResource {
      * @throws URISyntaxException URI 구문 오류가 발생한 경우
      * @throws JsonProcessingException JSON 처리 오류가 발생한 경우
      */
-    @PostMapping("/artists") /*TODO*/
-    public ResponseEntity<ArtistDTO> createArtist(@RequestParam("image") MultipartFile file, @RequestParam("artistDTO") String artistDTOStr) throws URISyntaxException, JsonProcessingException {
+    @PostMapping("/artists")
+    public ResponseEntity<ArtistDTO> createArtist(
+        @RequestParam("image") MultipartFile file,
+        @RequestParam("artistDTO") String artistDTOStr
+    ) throws URISyntaxException, JsonProcessingException {
         ArtistDTO artistDTO = this.convertToDTO(artistDTOStr);
 
         log.debug("REST request to save Artist : {}", artistDTO);
@@ -94,7 +102,6 @@ public class ArtistResource {
             .body(result);
     }
 
-
     /**
      * {@code PUT  /artists/:id} : 아티스트 정보를 업데이트합니다.
      *
@@ -104,7 +111,10 @@ public class ArtistResource {
      * @throws URISyntaxException URI 구문 예외가 발생할 경우
      */
     @PutMapping("/artists/{id}")
-    public ResponseEntity<ArtistDTO> updateArtist(@PathVariable(value = "id", required = false) final Long id, @RequestBody ArtistDTO artistDTO) throws URISyntaxException {
+    public ResponseEntity<ArtistDTO> updateArtist(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody ArtistDTO artistDTO
+    ) throws URISyntaxException {
         log.debug("REST request to update Artist : {}, {}", id, artistDTO);
 
         this.validateId(id, artistDTO);
@@ -130,7 +140,10 @@ public class ArtistResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/artists/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<ArtistDTO> partialUpdateArtist(@PathVariable(value = "id", required = false) final Long id, @RequestBody ArtistDTO artistDTO) throws URISyntaxException {
+    public ResponseEntity<ArtistDTO> partialUpdateArtist(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody ArtistDTO artistDTO
+    ) throws URISyntaxException {
         log.debug("REST request to partial update Artist partially : {}, {}", id, artistDTO);
 
         this.validateId(id, artistDTO);
@@ -267,8 +280,7 @@ public class ArtistResource {
      * @throws BadRequestAlertException Artist가 존재하지 않는 경우 발생합니다.
      */
     private Artist validateArtistExists(Long id) {
-        return artistRepository.findById(id)
-            .orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
+        return artistRepository.findById(id).orElseThrow(() -> new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
     }
 
     /**
@@ -285,6 +297,4 @@ public class ArtistResource {
             throw new BadRequestAlertException("You are not the owner of this artwork", ENTITY_NAME, "notowner");
         }
     }
-
-
 }
