@@ -27,7 +27,7 @@ public interface TokenProvider {
      * @param token 토큰 문자열
      * @return 추출된 사용자 ID (Long)
      */
-    Long getUserIdFromToken(String token);
+    Long getUserIdFromToken(String token); /*TODO: - SecurityUtils 로 옮기기*/
 
     /**
      * 토큰의 유효성을 검증합니다.
