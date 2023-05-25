@@ -4,7 +4,6 @@ import com.artbridge.artist.security.*;
 import com.artbridge.artist.security.jwt.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -20,15 +19,15 @@ public class SecurityConfiguration {
 
     private final JHipsterProperties jHipsterProperties;
 
-    private final TokenProvider tokenProvider;
+    private final TokenProviderimpl tokenProviderimpl;
     private final SecurityProblemSupport problemSupport;
 
     public SecurityConfiguration(
-        TokenProvider tokenProvider,
+        TokenProviderimpl tokenProviderimpl,
         JHipsterProperties jHipsterProperties,
         SecurityProblemSupport problemSupport
     ) {
-        this.tokenProvider = tokenProvider;
+        this.tokenProviderimpl = tokenProviderimpl;
         this.problemSupport = problemSupport;
         this.jHipsterProperties = jHipsterProperties;
     }
@@ -64,6 +63,6 @@ public class SecurityConfiguration {
     }
 
     private JWTConfigurer securityConfigurerAdapter() {
-        return new JWTConfigurer(tokenProvider);
+        return new JWTConfigurer(tokenProviderimpl);
     }
 }
