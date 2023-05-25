@@ -42,10 +42,10 @@ public interface ArtistService {
     Page<ArtistDTO> findAll(Pageable pageable);
 
     /**
-     * Get the "id" artist.
+     * 특정 아티스트 정보를 조회합니다.
      *
-     * @param id the id of the entity.
-     * @return the entity.
+     * @param id 조회할 아티스트의 ID (Long)
+     * @return 조회된 아티스트의 정보를 담은 Optional<ArtistDTO> 객체
      */
     Optional<ArtistDTO> findOne(Long id);
 

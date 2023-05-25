@@ -75,7 +75,10 @@ public class ArtistResource {
      * @throws JsonProcessingException JSON 처리 오류가 발생한 경우
      */
     @PostMapping("/artists")
-    public ResponseEntity<ArtistDTO> createArtist(@RequestParam("image") MultipartFile file, @RequestParam("artistDTO") String artistDTOStr) throws URISyntaxException, JsonProcessingException {/*TODO: 엔드포인트 수정*/
+    public ResponseEntity<ArtistDTO> createArtist(
+        @RequestParam("image") MultipartFile file,
+        @RequestParam("artistDTO") String artistDTOStr
+    ) throws URISyntaxException, JsonProcessingException {
         ArtistDTO artistDTO = this.convertToDTO(artistDTOStr);
 
         log.debug("REST request to save Artist : {}", artistDTO);
@@ -108,7 +111,10 @@ public class ArtistResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/artists/{id}")
-    public ResponseEntity<ArtistDTO> updateArtist(@PathVariable(value = "id", required = false) final Long id, @RequestBody ArtistDTO artistDTO) throws URISyntaxException {
+    public ResponseEntity<ArtistDTO> updateArtist(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody ArtistDTO artistDTO
+    ) throws URISyntaxException {
         log.debug("REST request to update Artist : {}, {}", id, artistDTO);
 
         this.validateArtist(id, artistDTO);
@@ -132,8 +138,10 @@ public class ArtistResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/artists/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<ArtistDTO> partialUpdateArtist(@PathVariable(value = "id", required = false) final Long id, @RequestBody ArtistDTO artistDTO) throws URISyntaxException {
-
+    public ResponseEntity<ArtistDTO> partialUpdateArtist(
+        @PathVariable(value = "id", required = false) final Long id,
+        @RequestBody ArtistDTO artistDTO
+    ) throws URISyntaxException {
         log.debug("REST request to partial update Artist partially : {}, {}", id, artistDTO);
 
         this.validateArtist(id, artistDTO);
@@ -161,10 +169,10 @@ public class ArtistResource {
     }
 
     /**
-     * {@code GET  /artists/:id} : get the "id" artist.
+     * {@code GET  /artists/:id} : 아티스트 정보를 조회합니다.
      *
-     * @param id the id of the artistDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the artistDTO, or with status {@code 404 (Not Found)}.
+     * @param id 조회할 아티스트의 ID (Long)
+     * @return 상태 코드와 함께 아티스트의 정보를 담은 ResponseEntity를 반환합니다.
      */
     @GetMapping("/artists/{id}")
     public ResponseEntity<ArtistDTO> getArtist(@PathVariable Long id) {
