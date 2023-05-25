@@ -10,10 +10,10 @@ import org.springframework.data.domain.Pageable;
  */
 public interface ArtistService {
     /**
-     * Save a artist.
+     * 아티스트 정보를 저장합니다.
      *
-     * @param artistDTO the entity to save.
-     * @return the persisted entity.
+     * @param artistDTO 저장할 아티스트 정보 (ArtistDTO)
+     * @return 저장된 아티스트의 정보를 담은 ArtistDTO 객체
      */
     ArtistDTO save(ArtistDTO artistDTO);
 
