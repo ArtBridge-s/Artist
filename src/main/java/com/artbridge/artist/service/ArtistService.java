@@ -50,11 +50,17 @@ public interface ArtistService {
     Optional<ArtistDTO> findOne(Long id);
 
     /**
-     * Delete the "id" artist.
+     * 아티스트를 삭제합니다.
      *
-     * @param id the id of the entity.
+     * @param id 삭제할 아티스트의 ID (Long)
      */
     void delete(Long id);
 
+    /**
+     * 아티스트 정보를 "삭제 대기 중"으로 변경합니다.
+     *
+     * @param artistDTO 삭제 대기 중으로 변경할 아티스트 정보 (ArtistDTO)
+     * @return 삭제 대기 중으로 변경된 아티스트의 정보를 담은 ArtistDTO 객체
+     */
     ArtistDTO deletePending(ArtistDTO artistDTO);
 }
