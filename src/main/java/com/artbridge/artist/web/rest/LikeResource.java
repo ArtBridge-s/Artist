@@ -163,7 +163,7 @@ public class LikeResource {
     }
 
 
-    @GetMapping("/counts")
+    @GetMapping("/likes/counts")
     public ResponseEntity<Long> getLikeCount(@RequestParam Long artworkId) {
         log.debug("REST request to get Like Count : {}", artworkId);
         Long count = likeService.countByArtworkId(artworkId);
