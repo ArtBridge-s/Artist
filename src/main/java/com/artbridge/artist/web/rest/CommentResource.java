@@ -52,11 +52,13 @@ public class CommentResource {
     }
 
     /**
-     * {@code POST  /comments} : Create a new comment.
+     * {@code POST  /comments} : 주어진 CommentDTO를 사용하여 새로운 댓글을 생성합니다.
      *
-     * @param commentDTO the commentDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new commentDTO, or with status {@code 400 (Bad Request)} if the comment has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param commentDTO 생성할 댓글의 정보 (CommentDTO)
+     * @return ResponseEntity<commentDTO> : 생성된 댓글과 함께 {@link ResponseEntity} 객체를 반환합니다.
+     * - 상태 코드 201(CREATED)와 함께 생성된 댓글의 URI를 포함한 헤더와 생성된 댓글의 본문을 포함합니다.
+     * @throws URISyntaxException       URI 구문이 잘못되었을 경우 발생하는 예외
+     * @throws BadRequestAlertException 유효하지 않은 ID가 이미 있는 경우 발생하는 예외
      */
     @PostMapping("/comments")
     public ResponseEntity<CommentDTO> createComment(@RequestBody CommentDTO commentDTO) throws URISyntaxException {
