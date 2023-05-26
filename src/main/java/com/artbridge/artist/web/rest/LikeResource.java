@@ -179,10 +179,10 @@ public class LikeResource {
 
 
     /**
-     * {@code DELETE  /likes/:id} : delete the "id" like.
+     * {@code DELETE  /likes/:id} : "id"에 해당하는 좋아요를 삭제합니다.
      *
-     * @param id the id of the likeDTO to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     * @param artistId 좋아요 ID (Long)
+     * @return {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/likes/{id}")
     public ResponseEntity<Void> deleteLike(@PathVariable(value = "id") Long artistId) {
