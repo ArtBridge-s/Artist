@@ -1,8 +1,11 @@
 package com.artbridge.artist.web.rest;
 
 import com.artbridge.artist.repository.LikeRepository;
+import com.artbridge.artist.security.SecurityUtils;
+import com.artbridge.artist.security.jwt.TokenProvider;
 import com.artbridge.artist.service.LikeService;
 import com.artbridge.artist.service.dto.LikeDTO;
+import com.artbridge.artist.service.dto.MemberDTO;
 import com.artbridge.artist.web.rest.errors.BadRequestAlertException;
 
 import java.net.URI;
@@ -18,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -41,10 +45,12 @@ public class LikeResource {
     private final LikeService likeService;
 
     private final LikeRepository likeRepository;
+    private final TokenProvider tokenProvider;
 
-    public LikeResource(LikeService likeService, LikeRepository likeRepository) {
+    public LikeResource(LikeService likeService, LikeRepository likeRepository, TokenProvider tokenProvider) {
         this.likeService = likeService;
         this.likeRepository = likeRepository;
+        this.tokenProvider = tokenProvider;
     }
 
     /**
@@ -60,6 +66,13 @@ public class LikeResource {
         if (likeDTO.getId() != null) {
             throw new BadRequestAlertException("A new like cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
+        String token = this.validateAndGetToken();
+
+        MemberDTO memberDTO = this.createMember(token);
+
+        likeDTO.setMemberDTO(memberDTO);
+
         LikeDTO result = likeService.save(likeDTO);
         return ResponseEntity.created(new URI("/api/likes/" + result.getId())).headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString())).body(result);
     }
@@ -160,5 +173,36 @@ public class LikeResource {
         log.debug("REST request to delete Like : {}", id);
         likeService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+
+
+
+
+    /**
+     * 현재 사용자로부터 얻은 JWT 토큰을 유효성 검사하고 유효한 토큰을 반환합니다.
+     *
+     * @return 유효한 JWT 토큰
+     * @throws BadRequestAlertException JWT 토큰이 잘못되었거나 존재하지 않는 경우
+     */
+    private String validateAndGetToken() { /*TODO -REFACTOR*/
+        Optional<String> optToken = SecurityUtils.getCurrentUserJWT();
+        if (optToken.isEmpty() || !this.tokenProvider.validateToken(optToken.get())) {
+            throw new BadRequestAlertException("Invalid JWT token", ENTITY_NAME, "invalidtoken");
+        }
+        return optToken.get();
+    }
+
+
+    /**
+     * 주어진 토큰을 사용하여 MemberDTO 객체를 생성합니다.
+     *
+     * @param token JWT 토큰
+     * @return MemberDTO 객체
+     */
+    private MemberDTO createMember(String token) { /*TODO -REFACTOR*/
+        Authentication authentication = this.tokenProvider.getAuthentication(token);
+        Long userId = this.tokenProvider.getUserIdFromToken(token);
+        return new MemberDTO(userId,  authentication.getName());
     }
 }
