@@ -56,5 +56,12 @@ public interface CommentService {
      */
     void delete(Long id);
 
+    /**
+     * 특정 아티스트의 댓글 목록을 페이지로 가져옵니다.
+     *
+     * @param pageable  페이지 설정 (Pageable)
+     * @param artistId  아티스트의 ID (Long)
+     * @return Page<CommentDTO> : 페이지에 해당하는 댓글 목록을 반환합니다.
+     */
     Page<CommentDTO> findByArtistId(Pageable pageable, Long artistId);
 }
