@@ -167,28 +167,34 @@ public class LikeResource {
      *
      * 주어진 작품 ID에 해당하는 작품의 좋아요 개수를 조회합니다.
      *
-     * @param artworkId 작품 ID (Long)
+     * @param artistId 작품 ID (Long)
      * @return 작품에 대한 좋아요 개수 (Long)
      */
     @GetMapping("/likes/counts")
-    public ResponseEntity<Long> getLikeCount(@RequestParam Long artworkId) {
-        log.debug("REST request to get Like Count : {}", artworkId);
-        Long count = likeService.countByArtworkId(artworkId);
+    public ResponseEntity<Long> getLikeCount(@RequestParam Long artistId) {
+        log.debug("REST request to get Like Count : {}", artistId);
+        Long count = likeService.countByArtistId(artistId);
         return ResponseEntity.ok().body(count);
     }
 
 
     /**
-     * {@code DELETE  /likes/:id} : delete the "id" like.
+     * {@code DELETE  /likes/:id} : "id"에 해당하는 좋아요를 삭제합니다.
      *
-     * @param id the id of the likeDTO to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     * @param artistId 좋아요 ID (Long)
+     * @return {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/likes/{id}")
-    public ResponseEntity<Void> deleteLike(@PathVariable Long id) {
-        log.debug("REST request to delete Like : {}", id);
-        likeService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    public ResponseEntity<Void> deleteLike(@PathVariable(value = "id") Long artistId) {
+        log.debug("REST request to delete Like : {}", artistId);
+        String token = this.validateAndGetToken();
+        MemberDTO memberDTO = this.createMember(token);
+
+        likeService.delete(artistId, memberDTO.getId());
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, artistId.toString()))
+            .build();
     }
 
 
