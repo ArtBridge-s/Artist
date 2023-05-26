@@ -54,11 +54,11 @@ public class LikeResource {
     }
 
     /**
-     * {@code POST  /likes} : Create a new like.
+     * {@code POST  /likes} : 좋아요를 생성합니다.
      *
-     * @param likeDTO the likeDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new likeDTO, or with status {@code 400 (Bad Request)} if the like has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param likeDTO 좋아요 정보 (LikeDTO)
+     * @return 생성된 좋아요 정보 (LikeDTO)를 담은 ResponseEntity 객체
+     * @throws URISyntaxException URI 문법이 잘못된 경우 발생하는 예외
      */
     @PostMapping("/likes")
     public ResponseEntity<LikeDTO> createLike(@RequestBody LikeDTO likeDTO) throws URISyntaxException {
