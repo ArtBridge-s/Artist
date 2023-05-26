@@ -162,7 +162,14 @@ public class LikeResource {
         return ResponseUtil.wrapOrNotFound(likeDTO);
     }
 
-
+    /**
+     * {@code GET  /likes/counts} : 작품에 대한 좋아요 개수를 조회합니다.
+     *
+     * 주어진 작품 ID에 해당하는 작품의 좋아요 개수를 조회합니다.
+     *
+     * @param artworkId 작품 ID (Long)
+     * @return 작품에 대한 좋아요 개수 (Long)
+     */
     @GetMapping("/likes/counts")
     public ResponseEntity<Long> getLikeCount(@RequestParam Long artworkId) {
         log.debug("REST request to get Like Count : {}", artworkId);
