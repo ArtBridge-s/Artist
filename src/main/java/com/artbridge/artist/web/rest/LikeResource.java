@@ -163,6 +163,22 @@ public class LikeResource {
     }
 
     /**
+     * {@code GET  /likes/counts} : 작품에 대한 좋아요 개수를 조회합니다.
+     *
+     * 주어진 작품 ID에 해당하는 작품의 좋아요 개수를 조회합니다.
+     *
+     * @param artworkId 작품 ID (Long)
+     * @return 작품에 대한 좋아요 개수 (Long)
+     */
+    @GetMapping("/likes/counts")
+    public ResponseEntity<Long> getLikeCount(@RequestParam Long artworkId) {
+        log.debug("REST request to get Like Count : {}", artworkId);
+        Long count = likeService.countByArtworkId(artworkId);
+        return ResponseEntity.ok().body(count);
+    }
+
+
+    /**
      * {@code DELETE  /likes/:id} : delete the "id" like.
      *
      * @param id the id of the likeDTO to delete.
