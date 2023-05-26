@@ -162,6 +162,15 @@ public class LikeResource {
         return ResponseUtil.wrapOrNotFound(likeDTO);
     }
 
+
+    @GetMapping("/counts")
+    public ResponseEntity<Long> getLikeCount(@RequestParam Long artworkId) {
+        log.debug("REST request to get Like Count : {}", artworkId);
+        Long count = likeService.countByArtworkId(artworkId);
+        return ResponseEntity.ok().body(count);
+    }
+
+
     /**
      * {@code DELETE  /likes/:id} : delete the "id" like.
      *
