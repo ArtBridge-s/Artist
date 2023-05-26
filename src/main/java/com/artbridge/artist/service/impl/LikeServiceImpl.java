@@ -87,4 +87,13 @@ public class LikeServiceImpl implements LikeService {
     public Long countByArtistId(Long artistId) {
         return likeRepository.countByArtist_Id(artistId);
     }
+
+    @Override
+    public void delete(Long artistId, Long memberId) {
+        log.debug("Request to delete Like : {}", artistId);
+
+        if (likeRepository.existsByArtist_IdAndMember_Id(artistId, memberId)) {
+            likeRepository.deleteByArtist_IdAndMember_Id(artistId, memberId);
+        }
+    }
 }

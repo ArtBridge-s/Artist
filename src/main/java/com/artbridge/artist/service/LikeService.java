@@ -65,4 +65,6 @@ public interface LikeService {
      */
     Long countByArtistId(Long artistId);
 
+    void delete(Long artistId, Long memberId);
+
 }
