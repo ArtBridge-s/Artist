@@ -9,6 +9,7 @@ import com.artbridge.artist.service.dto.MemberDTO;
 import com.artbridge.artist.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -154,7 +155,7 @@ public class CommentResource {
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of comments in body.
      */
-    @GetMapping("/comments")
+    @GetMapping("/comments/admin")
     public ResponseEntity<List<CommentDTO>> getAllComments(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Comments");
         Page<CommentDTO> page = commentService.findAll(pageable);
@@ -173,6 +174,20 @@ public class CommentResource {
         log.debug("REST request to get Comment : {}", id);
         Optional<CommentDTO> commentDTO = commentService.findOne(id);
         return ResponseUtil.wrapOrNotFound(commentDTO);
+    }
+
+
+    @GetMapping("/comments")
+    public ResponseEntity<List<CommentDTO>> getAllArtistComments(@RequestParam(value = "artistId") Long artistId, @org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+        log.debug("REST request to get a page of Comments");
+
+        if(!commentRepository.existsByArtist_Id(artistId)) {
+            return ResponseEntity.ok().body(new ArrayList<>());
+        }
+
+        Page<CommentDTO> page = commentService.findByArtistId(pageable, artistId);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
