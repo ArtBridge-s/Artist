@@ -10,10 +10,10 @@ import org.springframework.data.domain.Pageable;
  */
 public interface CommentService {
     /**
-     * Save a comment.
+     * 주어진 CommentDTO를 사용하여 댓글을 저장합니다.
      *
-     * @param commentDTO the entity to save.
-     * @return the persisted entity.
+     * @param commentDTO 저장할 댓글의 정보 (CommentDTO)
+     * @return CommentDTO : 저장된 댓글을 반환합니다.
      */
     CommentDTO save(CommentDTO commentDTO);
 
