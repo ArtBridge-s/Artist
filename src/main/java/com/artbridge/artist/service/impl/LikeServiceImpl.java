@@ -84,7 +84,7 @@ public class LikeServiceImpl implements LikeService {
     }
 
     @Override
-    public Long countByArtworkId(Long artworkId) {
-        return likeRepository.countByArtwork_Id(artworkId);
+    public Long countByArtworkId(Long artistId) {
+        return likeRepository.countByArtist_Id(artistId);
     }
 }
