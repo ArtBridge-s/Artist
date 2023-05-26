@@ -7,11 +7,14 @@ import com.artbridge.artist.service.CommentService;
 import com.artbridge.artist.service.dto.CommentDTO;
 import com.artbridge.artist.service.dto.MemberDTO;
 import com.artbridge.artist.web.rest.errors.BadRequestAlertException;
+
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,7 +46,7 @@ public class CommentResource {
     private final CommentService commentService;
 
     private final CommentRepository commentRepository;
-    private TokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
 
     public CommentResource(CommentService commentService, CommentRepository commentRepository, TokenProvider tokenProvider) {
         this.commentService = commentService;
@@ -72,27 +75,20 @@ public class CommentResource {
         commentDTO.setMemberDTO(memberDTO);
 
         CommentDTO result = commentService.save(commentDTO);
-        return ResponseEntity
-            .created(new URI("/api/comments/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        return ResponseEntity.created(new URI("/api/comments/" + result.getId())).headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString())).body(result);
     }
 
     /**
      * {@code PUT  /comments/:id} : Updates an existing comment.
      *
-     * @param id the id of the commentDTO to save.
+     * @param id         the id of the commentDTO to save.
      * @param commentDTO the commentDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated commentDTO,
      * or with status {@code 400 (Bad Request)} if the commentDTO is not valid,
      * or with status {@code 500 (Internal Server Error)} if the commentDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/comments/{id}")
-    public ResponseEntity<CommentDTO> updateComment(
-        @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody CommentDTO commentDTO
-    ) throws URISyntaxException {
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable(value = "id", required = false) final Long id, @RequestBody CommentDTO commentDTO) {
         log.debug("REST request to update Comment : {}, {}", id, commentDTO);
         if (commentDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -106,28 +102,21 @@ public class CommentResource {
         }
 
         CommentDTO result = commentService.update(commentDTO);
-        return ResponseEntity
-            .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, commentDTO.getId().toString()))
-            .body(result);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, commentDTO.getId().toString())).body(result);
     }
 
     /**
      * {@code PATCH  /comments/:id} : Partial updates given fields of an existing comment, field will ignore if it is null
      *
-     * @param id the id of the commentDTO to save.
+     * @param id         the id of the commentDTO to save.
      * @param commentDTO the commentDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated commentDTO,
      * or with status {@code 400 (Bad Request)} if the commentDTO is not valid,
      * or with status {@code 404 (Not Found)} if the commentDTO is not found,
      * or with status {@code 500 (Internal Server Error)} if the commentDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/comments/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<CommentDTO> partialUpdateComment(
-        @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody CommentDTO commentDTO
-    ) throws URISyntaxException {
+    @PatchMapping(value = "/comments/{id}", consumes = {"application/json", "application/merge-patch+json"})
+    public ResponseEntity<CommentDTO> partialUpdateComment(@PathVariable(value = "id", required = false) final Long id, @RequestBody CommentDTO commentDTO) {
         log.debug("REST request to partial update Comment partially : {}, {}", id, commentDTO);
         if (commentDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -142,10 +131,7 @@ public class CommentResource {
 
         Optional<CommentDTO> result = commentService.partialUpdate(commentDTO);
 
-        return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, commentDTO.getId().toString())
-        );
+        return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, commentDTO.getId().toString()));
     }
 
     /**
@@ -154,7 +140,7 @@ public class CommentResource {
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of comments in body.
      */
-    @GetMapping("/comments")
+    @GetMapping("/comments/admin")
     public ResponseEntity<List<CommentDTO>> getAllComments(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Comments");
         Page<CommentDTO> page = commentService.findAll(pageable);
@@ -176,6 +162,26 @@ public class CommentResource {
     }
 
     /**
+     * {@code GET  /comments} : 특정 아티스트의 모든 댓글 목록을 페이지로 가져옵니다.
+     *
+     * @param artistId 아티스트의 ID (Long)
+     * @param pageable 페이지 설정 (Pageable)
+     * @return ResponseEntity<List < CommentDTO>> : 페이지에 해당하는 댓글 목록을 반환합니다.
+     */
+    @GetMapping("/comments")
+    public ResponseEntity<List<CommentDTO>> getAllArtistComments(@RequestParam(value = "artistId") Long artistId, @org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+        log.debug("REST request to get a page of Comments");
+
+        if (!commentRepository.existsByArtist_Id(artistId)) {
+            return ResponseEntity.ok().body(new ArrayList<>());
+        }
+
+        Page<CommentDTO> page = commentService.findByArtistId(pageable, artistId);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
      * {@code DELETE  /comments/:id} : delete the "id" comment.
      *
      * @param id the id of the commentDTO to delete.
@@ -185,14 +191,8 @@ public class CommentResource {
     public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
         log.debug("REST request to delete Comment : {}", id);
         commentService.delete(id);
-        return ResponseEntity
-            .noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-            .build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
-
-
-
 
 
     /**
@@ -218,6 +218,6 @@ public class CommentResource {
     private MemberDTO createMember(String token) { /*TODO -REFACTOR*/
         Authentication authentication = this.tokenProvider.getAuthentication(token);
         Long userId = this.tokenProvider.getUserIdFromToken(token);
-        return new MemberDTO(userId,  authentication.getName());
+        return new MemberDTO(userId, authentication.getName());
     }
 }
