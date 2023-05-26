@@ -63,6 +63,6 @@ public interface LikeService {
      * @param artworkId 작품 ID (Long)
      * @return 작품에 대한 좋아요 개수 (Long)
      */
-    Long countByArtworkId(Long artworkId);
+    Long countByArtworkId(Long artistId);
 
 }
