@@ -9,4 +9,10 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface LikeRepository extends JpaRepository<Like, Long> {}
+public interface LikeRepository extends JpaRepository<Like, Long> {
+
+    boolean existsByArtist_IdAndMember_Id(Long artworkId, Long memberId);
+
+    void deleteByArtist_IdAndMember_Id(Long artistId, Long memberId);
+
+}

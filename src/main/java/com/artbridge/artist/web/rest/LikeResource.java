@@ -1,22 +1,27 @@
 package com.artbridge.artist.web.rest;
 
 import com.artbridge.artist.repository.LikeRepository;
+import com.artbridge.artist.security.SecurityUtils;
+import com.artbridge.artist.security.jwt.TokenProvider;
 import com.artbridge.artist.service.LikeService;
 import com.artbridge.artist.service.dto.LikeDTO;
+import com.artbridge.artist.service.dto.MemberDTO;
 import com.artbridge.artist.web.rest.errors.BadRequestAlertException;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -40,18 +45,20 @@ public class LikeResource {
     private final LikeService likeService;
 
     private final LikeRepository likeRepository;
+    private final TokenProvider tokenProvider;
 
-    public LikeResource(LikeService likeService, LikeRepository likeRepository) {
+    public LikeResource(LikeService likeService, LikeRepository likeRepository, TokenProvider tokenProvider) {
         this.likeService = likeService;
         this.likeRepository = likeRepository;
+        this.tokenProvider = tokenProvider;
     }
 
     /**
-     * {@code POST  /likes} : Create a new like.
+     * {@code POST  /likes} : 좋아요를 생성합니다.
      *
-     * @param likeDTO the likeDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new likeDTO, or with status {@code 400 (Bad Request)} if the like has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @param likeDTO 좋아요 정보 (LikeDTO)
+     * @return 생성된 좋아요 정보 (LikeDTO)를 담은 ResponseEntity 객체
+     * @throws URISyntaxException URI 문법이 잘못된 경우 발생하는 예외
      */
     @PostMapping("/likes")
     public ResponseEntity<LikeDTO> createLike(@RequestBody LikeDTO likeDTO) throws URISyntaxException {
@@ -59,17 +66,21 @@ public class LikeResource {
         if (likeDTO.getId() != null) {
             throw new BadRequestAlertException("A new like cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
+        String token = this.validateAndGetToken();
+
+        MemberDTO memberDTO = this.createMember(token);
+
+        likeDTO.setMemberDTO(memberDTO);
+
         LikeDTO result = likeService.save(likeDTO);
-        return ResponseEntity
-            .created(new URI("/api/likes/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        return ResponseEntity.created(new URI("/api/likes/" + result.getId())).headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString())).body(result);
     }
 
     /**
      * {@code PUT  /likes/:id} : Updates an existing like.
      *
-     * @param id the id of the likeDTO to save.
+     * @param id      the id of the likeDTO to save.
      * @param likeDTO the likeDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated likeDTO,
      * or with status {@code 400 (Bad Request)} if the likeDTO is not valid,
@@ -77,8 +88,7 @@ public class LikeResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/likes/{id}")
-    public ResponseEntity<LikeDTO> updateLike(@PathVariable(value = "id", required = false) final Long id, @RequestBody LikeDTO likeDTO)
-        throws URISyntaxException {
+    public ResponseEntity<LikeDTO> updateLike(@PathVariable(value = "id", required = false) final Long id, @RequestBody LikeDTO likeDTO) throws URISyntaxException {
         log.debug("REST request to update Like : {}, {}", id, likeDTO);
         if (likeDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -92,16 +102,13 @@ public class LikeResource {
         }
 
         LikeDTO result = likeService.update(likeDTO);
-        return ResponseEntity
-            .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, likeDTO.getId().toString()))
-            .body(result);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, likeDTO.getId().toString())).body(result);
     }
 
     /**
      * {@code PATCH  /likes/:id} : Partial updates given fields of an existing like, field will ignore if it is null
      *
-     * @param id the id of the likeDTO to save.
+     * @param id      the id of the likeDTO to save.
      * @param likeDTO the likeDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated likeDTO,
      * or with status {@code 400 (Bad Request)} if the likeDTO is not valid,
@@ -109,11 +116,8 @@ public class LikeResource {
      * or with status {@code 500 (Internal Server Error)} if the likeDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/likes/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<LikeDTO> partialUpdateLike(
-        @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody LikeDTO likeDTO
-    ) throws URISyntaxException {
+    @PatchMapping(value = "/likes/{id}", consumes = {"application/json", "application/merge-patch+json"})
+    public ResponseEntity<LikeDTO> partialUpdateLike(@PathVariable(value = "id", required = false) final Long id, @RequestBody LikeDTO likeDTO) throws URISyntaxException {
         log.debug("REST request to partial update Like partially : {}, {}", id, likeDTO);
         if (likeDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -128,10 +132,7 @@ public class LikeResource {
 
         Optional<LikeDTO> result = likeService.partialUpdate(likeDTO);
 
-        return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, likeDTO.getId().toString())
-        );
+        return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, likeDTO.getId().toString()));
     }
 
     /**
@@ -171,9 +172,37 @@ public class LikeResource {
     public ResponseEntity<Void> deleteLike(@PathVariable Long id) {
         log.debug("REST request to delete Like : {}", id);
         likeService.delete(id);
-        return ResponseEntity
-            .noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-            .build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+
+
+
+
+    /**
+     * 현재 사용자로부터 얻은 JWT 토큰을 유효성 검사하고 유효한 토큰을 반환합니다.
+     *
+     * @return 유효한 JWT 토큰
+     * @throws BadRequestAlertException JWT 토큰이 잘못되었거나 존재하지 않는 경우
+     */
+    private String validateAndGetToken() { /*TODO -REFACTOR*/
+        Optional<String> optToken = SecurityUtils.getCurrentUserJWT();
+        if (optToken.isEmpty() || !this.tokenProvider.validateToken(optToken.get())) {
+            throw new BadRequestAlertException("Invalid JWT token", ENTITY_NAME, "invalidtoken");
+        }
+        return optToken.get();
+    }
+
+
+    /**
+     * 주어진 토큰을 사용하여 MemberDTO 객체를 생성합니다.
+     *
+     * @param token JWT 토큰
+     * @return MemberDTO 객체
+     */
+    private MemberDTO createMember(String token) { /*TODO -REFACTOR*/
+        Authentication authentication = this.tokenProvider.getAuthentication(token);
+        Long userId = this.tokenProvider.getUserIdFromToken(token);
+        return new MemberDTO(userId,  authentication.getName());
     }
 }

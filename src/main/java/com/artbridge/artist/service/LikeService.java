@@ -9,11 +9,12 @@ import org.springframework.data.domain.Pageable;
  * Service Interface for managing {@link com.artbridge.artist.domain.Like}.
  */
 public interface LikeService {
+
     /**
-     * Save a like.
+     * 좋아요 정보를 저장합니다.
      *
-     * @param likeDTO the entity to save.
-     * @return the persisted entity.
+     * @param likeDTO 저장할 좋아요 정보 (LikeDTO)
+     * @return 저장된 좋아요 정보 (LikeDTO)
      */
     LikeDTO save(LikeDTO likeDTO);
 

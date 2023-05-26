@@ -35,6 +35,7 @@ public class LikeServiceImpl implements LikeService {
     public LikeDTO save(LikeDTO likeDTO) {
         log.debug("Request to save Like : {}", likeDTO);
         Like like = likeMapper.toEntity(likeDTO);
+        /*TODO: - Event memberDto name*/
         like = likeRepository.save(like);
         return likeMapper.toDto(like);
     }
