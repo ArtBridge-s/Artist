@@ -161,7 +161,13 @@ public class CommentResource {
         return ResponseUtil.wrapOrNotFound(commentDTO);
     }
 
-
+    /**
+     * {@code GET  /comments} : 특정 아티스트의 모든 댓글 목록을 페이지로 가져옵니다.
+     *
+     * @param artistId 아티스트의 ID (Long)
+     * @param pageable 페이지 설정 (Pageable)
+     * @return ResponseEntity<List < CommentDTO>> : 페이지에 해당하는 댓글 목록을 반환합니다.
+     */
     @GetMapping("/comments")
     public ResponseEntity<List<CommentDTO>> getAllArtistComments(@RequestParam(value = "artistId") Long artistId, @org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Comments");
