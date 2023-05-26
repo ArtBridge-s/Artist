@@ -46,7 +46,7 @@ public class CommentResource {
     private final CommentService commentService;
 
     private final CommentRepository commentRepository;
-    private TokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
 
     public CommentResource(CommentService commentService, CommentRepository commentRepository, TokenProvider tokenProvider) {
         this.commentService = commentService;
