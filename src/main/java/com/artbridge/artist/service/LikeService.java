@@ -65,6 +65,12 @@ public interface LikeService {
      */
     Long countByArtistId(Long artistId);
 
+    /**
+     * 주어진 아티스트 ID와 회원 ID에 해당하는 좋아요를 삭제합니다.
+     *
+     * @param artistId  삭제할 좋아요의 아티스트 ID (Long)
+     * @param memberId  좋아요를 작성한 회원의 ID (Long)
+     */
     void delete(Long artistId, Long memberId);
 
 }
