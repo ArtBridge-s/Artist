@@ -2,17 +2,22 @@
 version: '3.8'
 services:
   artist-app:
-    image: artist
+    image: imkunyoung/a-artist:latest
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - SPRING_PROFILES_ACTIVE=dev,api-docs
+#      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka
       - SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config
       - SPRING_DATASOURCE_URL=jdbc:mariadb://artist-mariadb:3306/artist?useLegacyDatetimeCode=false&serverTimezone=UTC
-      - SPRING_LIQUIBASE_URL=jdbc:mariadb://artist-mariadb:3306/artist?useLegacyDatetimeCode=false&serverTimezone=UTC
-      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=
+      - SPRING_DATASOURCE_TYPE=com.zaxxer.hikari.HikariDataSource
+#      - SPRING_LIQUIBASE_URL=jdbc:mariadb://artist-mariadb:3306/artist?useLegacyDatetimeCode=false&serverTimezone=UTC
+#      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
+    ports:
+      - 8002:8002
   artist-mariadb:
     image: mariadb:10.8.3
     # volumes:
