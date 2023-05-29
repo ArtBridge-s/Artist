@@ -15,10 +15,12 @@
 
 logging:
   level:
-    ROOT: info
-    tech.jhipster: info
-    org.hibernate.SQL: info
-    com.artbridge.artist: info
+    ROOT: Debug
+    tech.jhipster: Debug
+    org.hibernate.SQL: Debug
+    com.artbridge.artist: Debug
+    org.apache.kafka.clients: off
+    com.netflix: info
 
 eureka:
   instance:
