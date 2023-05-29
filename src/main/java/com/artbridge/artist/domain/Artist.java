@@ -62,19 +62,19 @@ public class Artist implements Serializable {
 
     @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JsonIgnoreProperties(value = { "artwork" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "artist" }, allowSetters = true)
     @ToString.Exclude
     private Set<Comment> comments = new HashSet<>();
 
     @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JsonIgnoreProperties(value = { "artwork" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "artist" }, allowSetters = true)
     @ToString.Exclude
     private Set<View> views = new HashSet<>();
 
     @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JsonIgnoreProperties(value = { "artwork" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "artist" }, allowSetters = true)
     @ToString.Exclude
     private Set<Like> likes = new HashSet<>();
 
