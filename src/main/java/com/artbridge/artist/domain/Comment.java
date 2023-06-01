@@ -61,6 +61,10 @@ public class Comment implements Serializable {
         return this;
     }
 
+    public Long getMemberId() {
+    	return this.member.getId();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
