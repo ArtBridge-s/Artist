@@ -237,7 +237,7 @@ public class ArtistResource {
 
 
     /**
-     * {@code DELETE  /artists/:id} : 아티스트 정보를 삭제합니다.
+     * {@code DELETE  /artists/:id} : Artist 삭제는 관리자 권한인 경우 즉시 삭제되며, 일반 사용자인 경우 삭제 대기 상태로 변경됩니다.
      *
      * @param id        삭제할 아티스트의 ID (Long)
      * @param artistDTO 삭제할 아티스트 정보 (ArtistDTO)
