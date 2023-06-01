@@ -1,5 +1,6 @@
 package com.artbridge.artist.service.impl;
 
+import com.artbridge.artist.adapter.MemberProducer;
 import com.artbridge.artist.domain.Comment;
 import com.artbridge.artist.repository.CommentRepository;
 import com.artbridge.artist.service.CommentService;
@@ -26,16 +27,20 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentMapper commentMapper;
 
-    public CommentServiceImpl(CommentRepository commentRepository, CommentMapper commentMapper) {
+    private final MemberProducer memberProducer;
+
+    public CommentServiceImpl(CommentRepository commentRepository, CommentMapper commentMapper, MemberProducer memberProducer) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
+        this.memberProducer = memberProducer;
     }
 
     @Override
     public CommentDTO save(CommentDTO commentDTO) {
         log.debug("Request to save Comment : {}", commentDTO);
         Comment comment = commentMapper.toEntity(commentDTO);
-        /*TODO: - Event memberDto name*/
+
+        this.memberProducer.requestMemberName(comment.getMemberId());
         comment = commentRepository.save(comment);
         return commentMapper.toDto(comment);
     }
