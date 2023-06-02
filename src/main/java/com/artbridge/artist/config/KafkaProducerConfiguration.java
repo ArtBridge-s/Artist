@@ -14,7 +14,7 @@ import java.util.Map;
 
 @EnableKafka
 @Configuration
-public class KafkaProducerConfig {
+public class KafkaProducerConfiguration {
 
     @Bean
     public ProducerFactory<String, String> producerFactory() {
@@ -29,6 +29,4 @@ public class KafkaProducerConfig {
     public KafkaTemplate<String, String> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
-
-
 }
