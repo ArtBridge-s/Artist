@@ -12,7 +12,7 @@ public class MemberProducerImpl implements MemberProducer {
     /*TODO: - need refactoring*/
 
     // 토픽명
-    private static final String TOPIC_MEMBERNAME = "topic_membername";
+    private static final String TOPIC_MEMBERNAME = "member-name-request";
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final KafkaTemplate<String, String> kafkaTemplate;
