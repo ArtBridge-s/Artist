@@ -1,4 +1,4 @@
-package com.artbridge.artist.web.rest;
+package com.artbridge.artist.presentation.rest;
 
 import static org.springframework.web.servlet.mvc.method.annotation.SseEmitter.event;
 

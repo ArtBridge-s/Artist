@@ -1,4 +1,4 @@
-package com.artbridge.artist.web.rest;
+package com.artbridge.artist.presentation.rest;
 
 import com.artbridge.artist.adapter.GCSService;
 import com.artbridge.artist.domain.Artist;
@@ -9,7 +9,7 @@ import com.artbridge.artist.security.jwt.TokenProvider;
 import com.artbridge.artist.service.ArtistService;
 import com.artbridge.artist.service.dto.ArtistDTO;
 import com.artbridge.artist.service.dto.MemberDTO;
-import com.artbridge.artist.web.rest.errors.BadRequestAlertException;
+import com.artbridge.artist.presentation.exception.BadRequestAlertException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

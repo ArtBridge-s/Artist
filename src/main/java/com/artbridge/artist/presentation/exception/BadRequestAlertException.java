@@ -1,4 +1,4 @@
-package com.artbridge.artist.web.rest.errors;
+package com.artbridge.artist.presentation.exception;
 
 import java.net.URI;
 import java.util.HashMap;

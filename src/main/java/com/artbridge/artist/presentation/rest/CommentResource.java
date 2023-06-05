@@ -1,12 +1,12 @@
-package com.artbridge.artist.web.rest;
+package com.artbridge.artist.presentation.rest;
 
+import com.artbridge.artist.presentation.exception.BadRequestAlertException;
 import com.artbridge.artist.repository.CommentRepository;
 import com.artbridge.artist.security.SecurityUtils;
 import com.artbridge.artist.security.jwt.TokenProvider;
 import com.artbridge.artist.service.CommentService;
 import com.artbridge.artist.service.dto.CommentDTO;
 import com.artbridge.artist.service.dto.MemberDTO;
-import com.artbridge.artist.web.rest.errors.BadRequestAlertException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
