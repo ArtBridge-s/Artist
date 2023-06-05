@@ -1,4 +1,4 @@
-package com.artbridge.artist.domain;
+package com.artbridge.artist.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;

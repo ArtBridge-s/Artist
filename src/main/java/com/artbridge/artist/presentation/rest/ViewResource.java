@@ -1,5 +1,6 @@
 package com.artbridge.artist.presentation.rest;
 
+import com.artbridge.artist.domain.model.View;
 import com.artbridge.artist.presentation.exception.BadRequestAlertException;
 import com.artbridge.artist.repository.ViewRepository;
 import com.artbridge.artist.service.ViewService;
@@ -24,7 +25,7 @@ import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
- * REST controller for managing {@link com.artbridge.artist.domain.View}.
+ * REST controller for managing {@link View}.
  */
 @RestController
 @RequestMapping("/api")

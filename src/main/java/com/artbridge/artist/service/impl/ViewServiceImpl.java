@@ -1,6 +1,6 @@
 package com.artbridge.artist.service.impl;
 
-import com.artbridge.artist.domain.View;
+import com.artbridge.artist.domain.model.View;
 import com.artbridge.artist.repository.ViewRepository;
 import com.artbridge.artist.service.ViewService;
 import com.artbridge.artist.service.dto.ViewDTO;

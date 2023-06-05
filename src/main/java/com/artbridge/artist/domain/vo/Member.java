@@ -1,4 +1,4 @@
-package com.artbridge.artist.domain.valueobject;
+package com.artbridge.artist.domain.vo;
 
 import java.io.Serializable;
 import javax.persistence.Column;

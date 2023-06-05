@@ -1,7 +1,7 @@
 package com.artbridge.artist.repository;
 
-import com.artbridge.artist.domain.Artist;
-import com.artbridge.artist.domain.enumeration.Status;
+import com.artbridge.artist.domain.model.Artist;
+import com.artbridge.artist.domain.standardType.Status;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;

@@ -1,7 +1,7 @@
 package com.artbridge.artist.presentation.rest;
 
 import com.artbridge.artist.adapter.GCSService;
-import com.artbridge.artist.domain.Artist;
+import com.artbridge.artist.domain.model.Artist;
 import com.artbridge.artist.repository.ArtistRepository;
 import com.artbridge.artist.security.AuthoritiesConstants;
 import com.artbridge.artist.security.SecurityUtils;
@@ -37,7 +37,7 @@ import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
- * REST controller for managing {@link com.artbridge.artist.domain.Artist}.
+ * REST controller for managing {@link Artist}.
  */
 @RestController
 @RequestMapping("/api")

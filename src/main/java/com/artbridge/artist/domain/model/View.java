@@ -1,6 +1,6 @@
-package com.artbridge.artist.domain;
+package com.artbridge.artist.domain.model;
 
-import com.artbridge.artist.domain.valueobject.Member;
+import com.artbridge.artist.domain.vo.Member;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.Objects;
@@ -11,17 +11,17 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
- * A Comment.
+ * A View.
  */
 @Entity
-@Table(name = "comment")
+@Table(name = "view")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@SuppressWarnings("common-java:DuplicatedBlocks")
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
-public class Comment implements Serializable {
+@SuppressWarnings("common-java:DuplicatedBlocks")
+public class View implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,46 +31,34 @@ public class Comment implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Embedded
+    @Column(name = "vo_member")
     private Member member;
-
-    @Column(name = "content")
-    private String content;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "comments", "views", "likes" }, allowSetters = true)
     private Artist artist;
 
-    public Comment id(Long id) {
+    public View id(Long id) {
         this.setId(id);
         return this;
     }
 
-    public Comment member(Member member) {
+    public View member(Member member) {
         this.setMember(member);
         return this;
     }
 
-    public Comment content(String content) {
-        this.setContent(content);
-        return this;
-    }
-
-    public Comment artwork(Artist artist) {
+    public View artist(Artist artist) {
         this.setArtist(artist);
         return this;
-    }
-
-    public Long getMemberId() {
-    	return this.member.getId();
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Comment comment = (Comment) o;
-        return getId() != null && Objects.equals(getId(), comment.getId());
+        View view = (View) o;
+        return getId() != null && Objects.equals(getId(), view.getId());
     }
 
     @Override

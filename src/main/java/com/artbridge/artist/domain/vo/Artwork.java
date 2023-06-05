@@ -1,4 +1,4 @@
-package com.artbridge.artist.domain.valueobject;
+package com.artbridge.artist.domain.vo;
 
 import lombok.Data;
 

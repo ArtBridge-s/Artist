@@ -1,12 +1,13 @@
 package com.artbridge.artist.service;
 
+import com.artbridge.artist.domain.model.Comment;
 import com.artbridge.artist.service.dto.CommentDTO;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
- * Service Interface for managing {@link com.artbridge.artist.domain.Comment}.
+ * Service Interface for managing {@link Comment}.
  */
 public interface CommentService {
     /**

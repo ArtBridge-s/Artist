@@ -1,12 +1,13 @@
 package com.artbridge.artist.service;
 
+import com.artbridge.artist.domain.model.Like;
 import com.artbridge.artist.service.dto.LikeDTO;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
- * Service Interface for managing {@link com.artbridge.artist.domain.Like}.
+ * Service Interface for managing {@link Like}.
  */
 public interface LikeService {
 

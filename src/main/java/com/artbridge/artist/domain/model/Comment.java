@@ -1,6 +1,6 @@
-package com.artbridge.artist.domain;
+package com.artbridge.artist.domain.model;
 
-import com.artbridge.artist.domain.valueobject.Member;
+import com.artbridge.artist.domain.vo.Member;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.Objects;
@@ -11,17 +11,17 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
- * A View.
+ * A Comment.
  */
 @Entity
-@Table(name = "view")
+@Table(name = "comment")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@SuppressWarnings("common-java:DuplicatedBlocks")
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
-@SuppressWarnings("common-java:DuplicatedBlocks")
-public class View implements Serializable {
+public class Comment implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,34 +31,46 @@ public class View implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "vo_member")
+    @Embedded
     private Member member;
+
+    @Column(name = "content")
+    private String content;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "comments", "views", "likes" }, allowSetters = true)
     private Artist artist;
 
-    public View id(Long id) {
+    public Comment id(Long id) {
         this.setId(id);
         return this;
     }
 
-    public View member(Member member) {
+    public Comment member(Member member) {
         this.setMember(member);
         return this;
     }
 
-    public View artist(Artist artist) {
+    public Comment content(String content) {
+        this.setContent(content);
+        return this;
+    }
+
+    public Comment artwork(Artist artist) {
         this.setArtist(artist);
         return this;
+    }
+
+    public Long getMemberId() {
+    	return this.member.getId();
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        View view = (View) o;
-        return getId() != null && Objects.equals(getId(), view.getId());
+        Comment comment = (Comment) o;
+        return getId() != null && Objects.equals(getId(), comment.getId());
     }
 
     @Override

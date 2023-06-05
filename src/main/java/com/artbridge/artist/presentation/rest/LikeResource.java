@@ -1,5 +1,6 @@
 package com.artbridge.artist.presentation.rest;
 
+import com.artbridge.artist.domain.model.Like;
 import com.artbridge.artist.presentation.exception.BadRequestAlertException;
 import com.artbridge.artist.repository.LikeRepository;
 import com.artbridge.artist.security.SecurityUtils;
@@ -29,7 +30,7 @@ import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
- * REST controller for managing {@link com.artbridge.artist.domain.Like}.
+ * REST controller for managing {@link Like}.
  */
 @RestController
 @RequestMapping("/api")

@@ -1,5 +1,6 @@
 package com.artbridge.artist.presentation.rest;
 
+import com.artbridge.artist.domain.model.Comment;
 import com.artbridge.artist.presentation.exception.BadRequestAlertException;
 import com.artbridge.artist.repository.CommentRepository;
 import com.artbridge.artist.security.SecurityUtils;
@@ -30,7 +31,7 @@ import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
- * REST controller for managing {@link com.artbridge.artist.domain.Comment}.
+ * REST controller for managing {@link Comment}.
  */
 @RestController
 @RequestMapping("/api")

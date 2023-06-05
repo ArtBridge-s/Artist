@@ -1,12 +1,13 @@
 package com.artbridge.artist.service;
 
+import com.artbridge.artist.domain.model.Artist;
 import com.artbridge.artist.service.dto.ArtistDTO;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
- * Service Interface for managing {@link com.artbridge.artist.domain.Artist}.
+ * Service Interface for managing {@link Artist}.
  */
 public interface ArtistService {
     /**

@@ -1,11 +1,12 @@
 package com.artbridge.artist.service.dto;
 
+import com.artbridge.artist.domain.model.View;
 import lombok.Data;
 
 import java.io.Serializable;
 
 /**
- * A DTO for the {@link com.artbridge.artist.domain.View} entity.
+ * A DTO for the {@link View} entity.
  */
 @SuppressWarnings("common-java:DuplicatedBlocks")
 @Data

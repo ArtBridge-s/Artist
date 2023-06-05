@@ -1,7 +1,7 @@
 package com.artbridge.artist.service.impl;
 
-import com.artbridge.artist.domain.Artist;
-import com.artbridge.artist.domain.enumeration.Status;
+import com.artbridge.artist.domain.model.Artist;
+import com.artbridge.artist.domain.standardType.Status;
 import com.artbridge.artist.repository.ArtistRepository;
 import com.artbridge.artist.service.ArtistService;
 import com.artbridge.artist.service.dto.ArtistDTO;

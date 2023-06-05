@@ -1,8 +1,8 @@
-package com.artbridge.artist.domain;
+package com.artbridge.artist.domain.model;
 
-import com.artbridge.artist.domain.enumeration.Status;
-import com.artbridge.artist.domain.valueobject.Artwork;
-import com.artbridge.artist.domain.valueobject.Member;
+import com.artbridge.artist.domain.standardType.Status;
+import com.artbridge.artist.domain.vo.Artwork;
+import com.artbridge.artist.domain.vo.Member;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.HashSet;

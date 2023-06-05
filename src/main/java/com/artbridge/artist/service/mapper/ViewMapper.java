@@ -1,10 +1,6 @@
 package com.artbridge.artist.service.mapper;
 
-import com.artbridge.artist.domain.Artist;
-import com.artbridge.artist.domain.Like;
-import com.artbridge.artist.domain.View;
-import com.artbridge.artist.service.dto.ArtistDTO;
-import com.artbridge.artist.service.dto.LikeDTO;
+import com.artbridge.artist.domain.model.View;
 import com.artbridge.artist.service.dto.ViewDTO;
 import org.mapstruct.*;
 
