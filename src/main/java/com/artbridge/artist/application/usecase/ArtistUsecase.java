@@ -1,7 +1,7 @@
-package com.artbridge.artist.service;
+package com.artbridge.artist.application.usecase;
 
 import com.artbridge.artist.domain.model.Artist;
-import com.artbridge.artist.service.dto.ArtistDTO;
+import com.artbridge.artist.application.dto.ArtistDTO;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 /**
  * Service Interface for managing {@link Artist}.
  */
-public interface ArtistService {
+public interface ArtistUsecase {
     /**
      * 아티스트 정보를 저장합니다.
      *

@@ -6,9 +6,9 @@ import com.artbridge.artist.infrastructure.repository.ArtistRepository;
 import com.artbridge.artist.infrastructure.security.AuthoritiesConstants;
 import com.artbridge.artist.infrastructure.security.SecurityUtils;
 import com.artbridge.artist.infrastructure.security.jwt.TokenProvider;
-import com.artbridge.artist.service.ArtistService;
-import com.artbridge.artist.service.dto.ArtistDTO;
-import com.artbridge.artist.service.dto.MemberDTO;
+import com.artbridge.artist.application.usecase.ArtistUsecase;
+import com.artbridge.artist.application.dto.ArtistDTO;
+import com.artbridge.artist.application.dto.MemberDTO;
 import com.artbridge.artist.presentation.exception.BadRequestAlertException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,7 +50,7 @@ public class ArtistResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ArtistService artistService;
+    private final ArtistUsecase artistUsecase;
 
     private final ArtistRepository artistRepository;
 
@@ -58,8 +58,8 @@ public class ArtistResource {
 
     private final GCSService gcsService;
 
-    public ArtistResource(ArtistService artistService, ArtistRepository artistRepository, TokenProvider tokenProvider, GCSService gcsService) {
-        this.artistService = artistService;
+    public ArtistResource(ArtistUsecase artistUsecase, ArtistRepository artistRepository, TokenProvider tokenProvider, GCSService gcsService) {
+        this.artistUsecase = artistUsecase;
         this.artistRepository = artistRepository;
         this.tokenProvider = tokenProvider;
         this.gcsService = gcsService;
@@ -90,7 +90,7 @@ public class ArtistResource {
 
         this.uploadImage(file, artistDTO);
 
-        ArtistDTO result = artistService.save(artistDTO);
+        ArtistDTO result = artistUsecase.save(artistDTO);
         return ResponseEntity.created(new URI("/api/artists/" + result.getId())).headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString())).body(result);
     }
 
@@ -110,7 +110,7 @@ public class ArtistResource {
         Artist artist = this.validateArtistExists(id);
         this.validateOwnership(artist);
 
-        ArtistDTO result = artistService.update(artistDTO);
+        ArtistDTO result = artistUsecase.update(artistDTO);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, artistDTO.getId().toString())).body(result);
     }
 
@@ -131,7 +131,7 @@ public class ArtistResource {
 
         this.validateId(id, artistDTO);
         this.validateArtistExists(id);
-        Optional<ArtistDTO> result = artistService.partialUpdate(artistDTO);
+        Optional<ArtistDTO> result = artistUsecase.partialUpdate(artistDTO);
 
         return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, artistDTO.getId().toString()));
     }
@@ -154,7 +154,7 @@ public class ArtistResource {
 
         this.validateArtistExists(id);
 
-        ArtistDTO result = artistService.authorizeOkArtist(id);
+        ArtistDTO result = artistUsecase.authorizeOkArtist(id);
 
         return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, id.toString())).body(result);
     }
@@ -168,7 +168,7 @@ public class ArtistResource {
     @GetMapping("/artists")
     public ResponseEntity<List<ArtistDTO>> getAllArtists(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Artists");
-        Page<ArtistDTO> page = artistService.findAllByStatus(pageable);
+        Page<ArtistDTO> page = artistUsecase.findAllByStatus(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -182,7 +182,7 @@ public class ArtistResource {
     @GetMapping("/artists/{id}")
     public ResponseEntity<ArtistDTO> getArtist(@PathVariable Long id) {
         log.debug("REST request to get Artist : {}", id);
-        Optional<ArtistDTO> artistDTO = artistService.findOne(id);
+        Optional<ArtistDTO> artistDTO = artistUsecase.findOne(id);
         return ResponseUtil.wrapOrNotFound(artistDTO);
     }
 
@@ -198,7 +198,7 @@ public class ArtistResource {
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<List<ArtistDTO>> getCreatePendings(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Artists");
-        Page<ArtistDTO> page = artistService.findCreatePendings(pageable);
+        Page<ArtistDTO> page = artistUsecase.findCreatePendings(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -214,7 +214,7 @@ public class ArtistResource {
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<List<ArtistDTO>> getUpdatePendings(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Artists");
-        Page<ArtistDTO> page = artistService.findUpdatePendings(pageable);
+        Page<ArtistDTO> page = artistUsecase.findUpdatePendings(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -230,7 +230,7 @@ public class ArtistResource {
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<List<ArtistDTO>> getDeletePendings(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Artists");
-        Page<ArtistDTO> page = artistService.findDeletePendings(pageable);
+        Page<ArtistDTO> page = artistUsecase.findDeletePendings(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -251,11 +251,11 @@ public class ArtistResource {
         this.validateArtistExists(id);
 
         if (SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
-            artistService.delete(id);
+            artistUsecase.delete(id);
             return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
         }
 
-        ArtistDTO result = artistService.deletePending(artistDTO);
+        ArtistDTO result = artistUsecase.deletePending(artistDTO);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, artistDTO.getId().toString())).body(result);
     }
 

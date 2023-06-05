@@ -5,9 +5,9 @@ import com.artbridge.artist.presentation.exception.BadRequestAlertException;
 import com.artbridge.artist.infrastructure.repository.LikeRepository;
 import com.artbridge.artist.infrastructure.security.SecurityUtils;
 import com.artbridge.artist.infrastructure.security.jwt.TokenProvider;
-import com.artbridge.artist.service.LikeService;
-import com.artbridge.artist.service.dto.LikeDTO;
-import com.artbridge.artist.service.dto.MemberDTO;
+import com.artbridge.artist.application.usecase.LikeUsecase;
+import com.artbridge.artist.application.dto.LikeDTO;
+import com.artbridge.artist.application.dto.MemberDTO;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -43,13 +43,13 @@ public class LikeResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final LikeService likeService;
+    private final LikeUsecase likeUsecase;
 
     private final LikeRepository likeRepository;
     private final TokenProvider tokenProvider;
 
-    public LikeResource(LikeService likeService, LikeRepository likeRepository, TokenProvider tokenProvider) {
-        this.likeService = likeService;
+    public LikeResource(LikeUsecase likeUsecase, LikeRepository likeRepository, TokenProvider tokenProvider) {
+        this.likeUsecase = likeUsecase;
         this.likeRepository = likeRepository;
         this.tokenProvider = tokenProvider;
     }
@@ -74,7 +74,7 @@ public class LikeResource {
 
         likeDTO.setMemberDTO(memberDTO);
 
-        LikeDTO result = likeService.save(likeDTO);
+        LikeDTO result = likeUsecase.save(likeDTO);
         return ResponseEntity.created(new URI("/api/likes/" + result.getId())).headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString())).body(result);
     }
 
@@ -102,7 +102,7 @@ public class LikeResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        LikeDTO result = likeService.update(likeDTO);
+        LikeDTO result = likeUsecase.update(likeDTO);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, likeDTO.getId().toString())).body(result);
     }
 
@@ -131,7 +131,7 @@ public class LikeResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<LikeDTO> result = likeService.partialUpdate(likeDTO);
+        Optional<LikeDTO> result = likeUsecase.partialUpdate(likeDTO);
 
         return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, likeDTO.getId().toString()));
     }
@@ -145,7 +145,7 @@ public class LikeResource {
     @GetMapping("/likes")
     public ResponseEntity<List<LikeDTO>> getAllLikes(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Likes");
-        Page<LikeDTO> page = likeService.findAll(pageable);
+        Page<LikeDTO> page = likeUsecase.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -159,7 +159,7 @@ public class LikeResource {
     @GetMapping("/likes/{id}")
     public ResponseEntity<LikeDTO> getLike(@PathVariable Long id) {
         log.debug("REST request to get Like : {}", id);
-        Optional<LikeDTO> likeDTO = likeService.findOne(id);
+        Optional<LikeDTO> likeDTO = likeUsecase.findOne(id);
         return ResponseUtil.wrapOrNotFound(likeDTO);
     }
 
@@ -174,7 +174,7 @@ public class LikeResource {
     @GetMapping("/likes/counts")
     public ResponseEntity<Long> getLikeCount(@RequestParam Long artistId) {
         log.debug("REST request to get Like Count : {}", artistId);
-        Long count = likeService.countByArtistId(artistId);
+        Long count = likeUsecase.countByArtistId(artistId);
         return ResponseEntity.ok().body(count);
     }
 
@@ -191,7 +191,7 @@ public class LikeResource {
         String token = this.validateAndGetToken();
         MemberDTO memberDTO = this.createMember(token);
 
-        likeService.delete(artistId, memberDTO.getId());
+        likeUsecase.delete(artistId, memberDTO.getId());
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, artistId.toString()))

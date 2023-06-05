@@ -5,9 +5,9 @@ import com.artbridge.artist.presentation.exception.BadRequestAlertException;
 import com.artbridge.artist.infrastructure.repository.CommentRepository;
 import com.artbridge.artist.infrastructure.security.SecurityUtils;
 import com.artbridge.artist.infrastructure.security.jwt.TokenProvider;
-import com.artbridge.artist.service.CommentService;
-import com.artbridge.artist.service.dto.CommentDTO;
-import com.artbridge.artist.service.dto.MemberDTO;
+import com.artbridge.artist.application.usecase.CommentUsecase;
+import com.artbridge.artist.application.dto.CommentDTO;
+import com.artbridge.artist.application.dto.MemberDTO;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -44,12 +44,12 @@ public class CommentResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final CommentService commentService;
+    private final CommentUsecase commentService;
 
     private final CommentRepository commentRepository;
     private final TokenProvider tokenProvider;
 
-    public CommentResource(CommentService commentService, CommentRepository commentRepository, TokenProvider tokenProvider) {
+    public CommentResource(CommentUsecase commentService, CommentRepository commentRepository, TokenProvider tokenProvider) {
         this.commentService = commentService;
         this.commentRepository = commentRepository;
         this.tokenProvider = tokenProvider;

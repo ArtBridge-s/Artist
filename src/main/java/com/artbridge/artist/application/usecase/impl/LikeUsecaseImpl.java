@@ -1,10 +1,10 @@
-package com.artbridge.artist.service.impl;
+package com.artbridge.artist.application.usecase.impl;
 
 import com.artbridge.artist.domain.model.Like;
 import com.artbridge.artist.infrastructure.repository.LikeRepository;
-import com.artbridge.artist.service.LikeService;
-import com.artbridge.artist.service.dto.LikeDTO;
-import com.artbridge.artist.service.mapper.LikeMapper;
+import com.artbridge.artist.application.usecase.LikeUsecase;
+import com.artbridge.artist.application.dto.LikeDTO;
+import com.artbridge.artist.application.mapper.LikeMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,15 +18,15 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class LikeServiceImpl implements LikeService {
+public class LikeUsecaseImpl implements LikeUsecase {
 
-    private final Logger log = LoggerFactory.getLogger(LikeServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(LikeUsecaseImpl.class);
 
     private final LikeRepository likeRepository;
 
     private final LikeMapper likeMapper;
 
-    public LikeServiceImpl(LikeRepository likeRepository, LikeMapper likeMapper) {
+    public LikeUsecaseImpl(LikeRepository likeRepository, LikeMapper likeMapper) {
         this.likeRepository = likeRepository;
         this.likeMapper = likeMapper;
     }

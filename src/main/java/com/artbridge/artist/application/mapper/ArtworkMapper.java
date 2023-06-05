@@ -1,7 +1,7 @@
-package com.artbridge.artist.service.mapper;
+package com.artbridge.artist.application.mapper;
 
+import com.artbridge.artist.application.dto.ArtworkDTO;
 import com.artbridge.artist.domain.vo.Artwork;
-import com.artbridge.artist.service.dto.ArtworkDTO;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

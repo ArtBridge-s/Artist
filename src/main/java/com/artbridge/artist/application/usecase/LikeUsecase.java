@@ -1,7 +1,7 @@
-package com.artbridge.artist.service;
+package com.artbridge.artist.application.usecase;
 
 import com.artbridge.artist.domain.model.Like;
-import com.artbridge.artist.service.dto.LikeDTO;
+import com.artbridge.artist.application.dto.LikeDTO;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 /**
  * Service Interface for managing {@link Like}.
  */
-public interface LikeService {
+public interface LikeUsecase {
 
     /**
      * 좋아요 정보를 저장합니다.

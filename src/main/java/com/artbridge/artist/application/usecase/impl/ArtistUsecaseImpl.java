@@ -1,11 +1,11 @@
-package com.artbridge.artist.service.impl;
+package com.artbridge.artist.application.usecase.impl;
 
+import com.artbridge.artist.application.usecase.ArtistUsecase;
 import com.artbridge.artist.domain.model.Artist;
 import com.artbridge.artist.domain.standardType.Status;
 import com.artbridge.artist.infrastructure.repository.ArtistRepository;
-import com.artbridge.artist.service.ArtistService;
-import com.artbridge.artist.service.dto.ArtistDTO;
-import com.artbridge.artist.service.mapper.ArtistMapper;
+import com.artbridge.artist.application.dto.ArtistDTO;
+import com.artbridge.artist.application.mapper.ArtistMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,15 +19,15 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class ArtistServiceImpl implements ArtistService {
+public class ArtistUsecaseImpl implements ArtistUsecase {
 
-    private final Logger log = LoggerFactory.getLogger(ArtistServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(ArtistUsecaseImpl.class);
 
     private final ArtistRepository artistRepository;
 
     private final ArtistMapper artistMapper;
 
-    public ArtistServiceImpl(ArtistRepository artistRepository, ArtistMapper artistMapper) {
+    public ArtistUsecaseImpl(ArtistRepository artistRepository, ArtistMapper artistMapper) {
         this.artistRepository = artistRepository;
         this.artistMapper = artistMapper;
     }

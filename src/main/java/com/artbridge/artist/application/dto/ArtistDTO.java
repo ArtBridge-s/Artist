@@ -1,4 +1,4 @@
-package com.artbridge.artist.service.dto;
+package com.artbridge.artist.application.dto;
 
 import com.artbridge.artist.domain.standardType.Status;
 import java.io.Serializable;
