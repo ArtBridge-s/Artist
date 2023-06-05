@@ -2,7 +2,7 @@ package com.artbridge.artist.presentation.rest;
 
 import com.artbridge.artist.domain.model.View;
 import com.artbridge.artist.presentation.exception.BadRequestAlertException;
-import com.artbridge.artist.repository.ViewRepository;
+import com.artbridge.artist.infrastructure.repository.ViewRepository;
 import com.artbridge.artist.service.ViewService;
 import com.artbridge.artist.service.dto.ViewDTO;
 

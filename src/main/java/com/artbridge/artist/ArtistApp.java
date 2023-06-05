@@ -1,7 +1,7 @@
 package com.artbridge.artist;
 
-import com.artbridge.artist.config.ApplicationProperties;
-import com.artbridge.artist.config.CRLFLogConverter;
+import com.artbridge.artist.infrastructure.configuration.ApplicationProperties;
+import com.artbridge.artist.infrastructure.configuration.CRLFLogConverter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;

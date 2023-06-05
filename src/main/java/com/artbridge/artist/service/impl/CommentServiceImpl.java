@@ -1,8 +1,8 @@
 package com.artbridge.artist.service.impl;
 
-import com.artbridge.artist.adapter.MemberProducer;
+import com.artbridge.artist.infrastructure.messaging.MemberProducer;
 import com.artbridge.artist.domain.model.Comment;
-import com.artbridge.artist.repository.CommentRepository;
+import com.artbridge.artist.infrastructure.repository.CommentRepository;
 import com.artbridge.artist.service.CommentService;
 import com.artbridge.artist.service.dto.CommentDTO;
 import com.artbridge.artist.service.mapper.CommentMapper;

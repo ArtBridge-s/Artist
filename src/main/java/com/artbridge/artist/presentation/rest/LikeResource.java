@@ -2,9 +2,9 @@ package com.artbridge.artist.presentation.rest;
 
 import com.artbridge.artist.domain.model.Like;
 import com.artbridge.artist.presentation.exception.BadRequestAlertException;
-import com.artbridge.artist.repository.LikeRepository;
-import com.artbridge.artist.security.SecurityUtils;
-import com.artbridge.artist.security.jwt.TokenProvider;
+import com.artbridge.artist.infrastructure.repository.LikeRepository;
+import com.artbridge.artist.infrastructure.security.SecurityUtils;
+import com.artbridge.artist.infrastructure.security.jwt.TokenProvider;
 import com.artbridge.artist.service.LikeService;
 import com.artbridge.artist.service.dto.LikeDTO;
 import com.artbridge.artist.service.dto.MemberDTO;

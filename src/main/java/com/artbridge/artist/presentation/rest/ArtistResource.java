@@ -1,11 +1,11 @@
 package com.artbridge.artist.presentation.rest;
 
-import com.artbridge.artist.adapter.GCSService;
+import com.artbridge.artist.infrastructure.gcs.GCSService;
 import com.artbridge.artist.domain.model.Artist;
-import com.artbridge.artist.repository.ArtistRepository;
-import com.artbridge.artist.security.AuthoritiesConstants;
-import com.artbridge.artist.security.SecurityUtils;
-import com.artbridge.artist.security.jwt.TokenProvider;
+import com.artbridge.artist.infrastructure.repository.ArtistRepository;
+import com.artbridge.artist.infrastructure.security.AuthoritiesConstants;
+import com.artbridge.artist.infrastructure.security.SecurityUtils;
+import com.artbridge.artist.infrastructure.security.jwt.TokenProvider;
 import com.artbridge.artist.service.ArtistService;
 import com.artbridge.artist.service.dto.ArtistDTO;
 import com.artbridge.artist.service.dto.MemberDTO;

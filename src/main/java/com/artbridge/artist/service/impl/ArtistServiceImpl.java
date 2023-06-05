@@ -2,7 +2,7 @@ package com.artbridge.artist.service.impl;
 
 import com.artbridge.artist.domain.model.Artist;
 import com.artbridge.artist.domain.standardType.Status;
-import com.artbridge.artist.repository.ArtistRepository;
+import com.artbridge.artist.infrastructure.repository.ArtistRepository;
 import com.artbridge.artist.service.ArtistService;
 import com.artbridge.artist.service.dto.ArtistDTO;
 import com.artbridge.artist.service.mapper.ArtistMapper;

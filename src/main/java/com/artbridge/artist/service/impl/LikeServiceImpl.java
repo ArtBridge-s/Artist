@@ -1,7 +1,7 @@
 package com.artbridge.artist.service.impl;
 
 import com.artbridge.artist.domain.model.Like;
-import com.artbridge.artist.repository.LikeRepository;
+import com.artbridge.artist.infrastructure.repository.LikeRepository;
 import com.artbridge.artist.service.LikeService;
 import com.artbridge.artist.service.dto.LikeDTO;
 import com.artbridge.artist.service.mapper.LikeMapper;

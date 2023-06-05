@@ -2,9 +2,9 @@ package com.artbridge.artist.presentation.rest;
 
 import com.artbridge.artist.domain.model.Comment;
 import com.artbridge.artist.presentation.exception.BadRequestAlertException;
-import com.artbridge.artist.repository.CommentRepository;
-import com.artbridge.artist.security.SecurityUtils;
-import com.artbridge.artist.security.jwt.TokenProvider;
+import com.artbridge.artist.infrastructure.repository.CommentRepository;
+import com.artbridge.artist.infrastructure.security.SecurityUtils;
+import com.artbridge.artist.infrastructure.security.jwt.TokenProvider;
 import com.artbridge.artist.service.CommentService;
 import com.artbridge.artist.service.dto.CommentDTO;
 import com.artbridge.artist.service.dto.MemberDTO;

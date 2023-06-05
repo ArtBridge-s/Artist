@@ -8,8 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.artbridge.artist.IntegrationTest;
 import com.artbridge.artist.config.EmbeddedKafka;
-import com.artbridge.artist.config.KafkaSseConsumer;
-import com.artbridge.artist.config.KafkaSseProducer;
+import com.artbridge.artist.infrastructure.configuration.KafkaSseConsumer;
+import com.artbridge.artist.infrastructure.configuration.KafkaSseProducer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
