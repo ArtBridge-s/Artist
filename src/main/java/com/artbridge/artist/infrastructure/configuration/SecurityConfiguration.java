@@ -3,8 +3,6 @@ package com.artbridge.artist.infrastructure.configuration;
 import com.artbridge.artist.infrastructure.security.AuthoritiesConstants;
 import com.artbridge.artist.infrastructure.security.jwt.JWTConfigurer;
 import com.artbridge.artist.infrastructure.security.jwt.TokenProviderimpl;
-import com.artbridge.artist.security.*;
-import com.artbridge.artist.security.jwt.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
