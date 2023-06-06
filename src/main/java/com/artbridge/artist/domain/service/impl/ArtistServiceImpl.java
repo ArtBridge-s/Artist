@@ -22,4 +22,9 @@ public class ArtistServiceImpl implements ArtistService {
     public void setDeletePendingStatus(Artist artist) {
         artist.setStatus(Status.DELETE_PENDING);
     }
+
+    @Override
+    public void setOkStatus(Artist artist) {
+        artist.setStatus(Status.OK);
+    }
 }

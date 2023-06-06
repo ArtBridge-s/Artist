@@ -127,7 +127,7 @@ public class ArtistUsecaseImpl implements ArtistUsecase {
         log.debug("Request to authorize ok artist : {}", id);
         return artistRepository.findById(id)
             .map(artist -> {
-                artist.setStatus(Status.OK);
+                artistService.setOkStatus(artist);
                 return artistMapper.toDto(artistRepository.save(artist));
             })
             .orElseThrow();

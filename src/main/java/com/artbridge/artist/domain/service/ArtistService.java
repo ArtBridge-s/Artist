@@ -8,4 +8,6 @@ public interface ArtistService {
     void setRevisionPendingStatus(Artist artist);
 
     void setDeletePendingStatus(Artist artist);
+
+    void setOkStatus(Artist artist);
 }
