@@ -4,4 +4,6 @@ import com.artbridge.artist.domain.model.Artist;
 
 public interface ArtistService {
     void setUploadPendingStatus(Artist artist);
+
+    void setRevisionPendingStatus(Artist artist);
 }

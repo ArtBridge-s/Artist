@@ -12,4 +12,9 @@ public class ArtistServiceImpl implements ArtistService {
     public void setUploadPendingStatus(Artist artist) {
         artist.setStatus(Status.UPLOAD_PENDING);
     }
+
+    @Override
+    public void setRevisionPendingStatus(Artist artist) {
+        artist.setStatus(Status.REVISION_PENDING);
+    }
 }

@@ -49,7 +49,7 @@ public class ArtistUsecaseImpl implements ArtistUsecase {
     public ArtistDTO update(ArtistDTO artistDTO) {
         log.debug("Request to update Artist : {}", artistDTO);
         Artist artist = artistMapper.toEntity(artistDTO);
-        artist.setStatus(Status.REVISION_PENDING);
+        artistService.setRevisionPendingStatus(artist);
         artist = artistRepository.save(artist);
         return artistMapper.toDto(artist);
     }
