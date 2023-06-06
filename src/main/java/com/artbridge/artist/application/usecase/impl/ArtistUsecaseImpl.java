@@ -100,25 +100,25 @@ public class ArtistUsecaseImpl implements ArtistUsecase {
 
     @Override
     public Page<ArtistDTO> findAllByStatus(Pageable pageable) {
-        log.debug("Request to get all Artists by status");
+        log.debug("Request to get all Artists by status: {}", Status.OK);
         return artistRepository.findAllByStatus(pageable, Status.OK).map(artistMapper::toDto);
     }
 
     @Override
     public Page<ArtistDTO> findCreatePendings(Pageable pageable) {
-        log.debug("Request to get all Artists by status");
+        log.debug("Request to get create pending Artists");
         return artistRepository.findAllByStatus(pageable, Status.UPLOAD_PENDING).map(artistMapper::toDto);
     }
 
     @Override
     public Page<ArtistDTO> findUpdatePendings(Pageable pageable) {
-        log.debug("Request to get all Artists by status");
+        log.debug("Request to get update pending Artists");
         return artistRepository.findAllByStatus(pageable, Status.REVISION_PENDING).map(artistMapper::toDto);
     }
 
     @Override
     public Page<ArtistDTO> findDeletePendings(Pageable pageable) {
-        log.debug("Request to get all Artists by status");
+        log.debug("Request to get delete pending Artists");
         return artistRepository.findAllByStatus(pageable, Status.DELETE_PENDING).map(artistMapper::toDto);
     }
 
