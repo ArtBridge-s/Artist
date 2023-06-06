@@ -6,4 +6,6 @@ public interface ArtistService {
     void setUploadPendingStatus(Artist artist);
 
     void setRevisionPendingStatus(Artist artist);
+
+    void setDeletePendingStatus(Artist artist);
 }

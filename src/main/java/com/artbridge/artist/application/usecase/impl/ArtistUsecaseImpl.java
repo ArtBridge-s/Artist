@@ -93,7 +93,7 @@ public class ArtistUsecaseImpl implements ArtistUsecase {
     public ArtistDTO deletePending(ArtistDTO artistDTO) {
         log.debug("Request to delete pending Artist : {}", artistDTO);
         Artist artist = artistMapper.toEntity(artistDTO);
-        artist.setStatus(Status.DELETE_PENDING);
+        artistService.setDeletePendingStatus(artist);
         artist = artistRepository.save(artist);
         return artistMapper.toDto(artist);
     }

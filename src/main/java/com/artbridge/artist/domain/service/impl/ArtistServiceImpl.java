@@ -17,4 +17,9 @@ public class ArtistServiceImpl implements ArtistService {
     public void setRevisionPendingStatus(Artist artist) {
         artist.setStatus(Status.REVISION_PENDING);
     }
+
+    @Override
+    public void setDeletePendingStatus(Artist artist) {
+        artist.setStatus(Status.DELETE_PENDING);
+    }
 }
