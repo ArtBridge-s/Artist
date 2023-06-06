@@ -2,11 +2,13 @@ package com.artbridge.artist.application.usecase.impl;
 
 import com.artbridge.artist.application.usecase.ArtistUsecase;
 import com.artbridge.artist.domain.model.Artist;
+import com.artbridge.artist.domain.service.ArtistService;
 import com.artbridge.artist.domain.standardType.Status;
-import com.artbridge.artist.infrastructure.repository.ArtistRepository;
 import com.artbridge.artist.application.dto.ArtistDTO;
 import com.artbridge.artist.application.mapper.ArtistMapper;
 import java.util.Optional;
+
+import com.artbridge.artist.infrastructure.repository.ArtistRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -26,17 +28,19 @@ public class ArtistUsecaseImpl implements ArtistUsecase {
     private final ArtistRepository artistRepository;
 
     private final ArtistMapper artistMapper;
+    private final ArtistService artistService;
 
-    public ArtistUsecaseImpl(ArtistRepository artistRepository, ArtistMapper artistMapper) {
+    public ArtistUsecaseImpl(ArtistRepository artistRepository, ArtistMapper artistMapper, ArtistService artistService) {
         this.artistRepository = artistRepository;
         this.artistMapper = artistMapper;
+        this.artistService = artistService;
     }
 
     @Override
     public ArtistDTO save(ArtistDTO artistDTO) {
         log.debug("Request to save Artist : {}", artistDTO);
         Artist artist = artistMapper.toEntity(artistDTO);
-        artist.setStatus(Status.UPLOAD_PENDING);
+        artistService.setUploadPendingStatus(artist);
         artist = artistRepository.save(artist);
         return artistMapper.toDto(artist);
     }
