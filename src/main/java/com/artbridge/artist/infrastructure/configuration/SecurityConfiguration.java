@@ -54,7 +54,6 @@ public class SecurityConfiguration {
             .antMatchers(HttpMethod.GET,"/api/likes/**").permitAll()
             .antMatchers(HttpMethod.GET,"/api/views/**").permitAll()
             .antMatchers("/h2-console/**").permitAll()
-            .antMatchers(HttpMethod.GET, "/api/artists").permitAll()
             .antMatchers("/api/authenticate").permitAll()
             .antMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/**").authenticated()
