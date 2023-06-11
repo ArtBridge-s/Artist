@@ -3,7 +3,7 @@ package com.artbridge.artist.presentation.rest;
 import com.artbridge.artist.domain.model.View;
 import com.artbridge.artist.presentation.exception.BadRequestAlertException;
 import com.artbridge.artist.infrastructure.repository.ViewRepository;
-import com.artbridge.artist.application.usecase.ViewUsecase;
+import com.artbridge.artist.application.service.ViewService;
 import com.artbridge.artist.application.dto.ViewDTO;
 
 import java.net.URI;
@@ -38,12 +38,12 @@ public class ViewResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ViewUsecase viewUsecase;
+    private final ViewService viewService;
 
     private final ViewRepository viewRepository;
 
-    public ViewResource(ViewUsecase viewUsecase, ViewRepository viewRepository) {
-        this.viewUsecase = viewUsecase;
+    public ViewResource(ViewService viewService, ViewRepository viewRepository) {
+        this.viewService = viewService;
         this.viewRepository = viewRepository;
     }
 
@@ -60,7 +60,7 @@ public class ViewResource {
         if (viewDTO.getId() != null) {
             throw new BadRequestAlertException("A new view cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ViewDTO result = viewUsecase.save(viewDTO);
+        ViewDTO result = viewService.save(viewDTO);
         return ResponseEntity
             .created(new URI("/api/views/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -92,7 +92,7 @@ public class ViewResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        ViewDTO result = viewUsecase.update(viewDTO);
+        ViewDTO result = viewService.update(viewDTO);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, viewDTO.getId().toString()))
@@ -127,7 +127,7 @@ public class ViewResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<ViewDTO> result = viewUsecase.partialUpdate(viewDTO);
+        Optional<ViewDTO> result = viewService.partialUpdate(viewDTO);
 
         return ResponseUtil.wrapOrNotFound(
             result,
@@ -144,7 +144,7 @@ public class ViewResource {
     @GetMapping("/views")
     public ResponseEntity<List<ViewDTO>> getAllViews(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Views");
-        Page<ViewDTO> page = viewUsecase.findAll(pageable);
+        Page<ViewDTO> page = viewService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -158,7 +158,7 @@ public class ViewResource {
     @GetMapping("/views/{id}")
     public ResponseEntity<ViewDTO> getView(@PathVariable Long id) {
         log.debug("REST request to get View : {}", id);
-        Optional<ViewDTO> viewDTO = viewUsecase.findOne(id);
+        Optional<ViewDTO> viewDTO = viewService.findOne(id);
         return ResponseUtil.wrapOrNotFound(viewDTO);
     }
 
@@ -171,7 +171,7 @@ public class ViewResource {
     @DeleteMapping("/views/{id}")
     public ResponseEntity<Void> deleteView(@PathVariable Long id) {
         log.debug("REST request to delete View : {}", id);
-        viewUsecase.delete(id);
+        viewService.delete(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))

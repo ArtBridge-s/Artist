@@ -1,4 +1,4 @@
-package com.artbridge.artist.application.usecase;
+package com.artbridge.artist.application.service;
 
 import com.artbridge.artist.domain.model.Comment;
 import com.artbridge.artist.application.dto.CommentDTO;
@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 /**
  * Service Interface for managing {@link Comment}.
  */
-public interface CommentUsecase {
+public interface CommentService {
     /**
      * 주어진 CommentDTO를 사용하여 댓글을 저장합니다.
      *

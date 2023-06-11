@@ -1,8 +1,6 @@
-package com.artbridge.artist.application.usecase.impl;
+package com.artbridge.artist.application.service;
 
-import com.artbridge.artist.application.usecase.ArtistUsecase;
 import com.artbridge.artist.domain.model.Artist;
-import com.artbridge.artist.domain.service.ArtistService;
 import com.artbridge.artist.domain.standardType.Status;
 import com.artbridge.artist.application.dto.ArtistDTO;
 import com.artbridge.artist.application.mapper.ArtistMapper;
@@ -21,26 +19,25 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class ArtistUsecaseImpl implements ArtistUsecase {
+public class ArtistServiceImpl implements ArtistService {
 
-    private final Logger log = LoggerFactory.getLogger(ArtistUsecaseImpl.class);
+    private final Logger log = LoggerFactory.getLogger(ArtistServiceImpl.class);
 
     private final ArtistRepository artistRepository;
 
     private final ArtistMapper artistMapper;
-    private final ArtistService artistService;
 
-    public ArtistUsecaseImpl(ArtistRepository artistRepository, ArtistMapper artistMapper, ArtistService artistService) {
+    public ArtistServiceImpl(ArtistRepository artistRepository, ArtistMapper artistMapper) {
         this.artistRepository = artistRepository;
         this.artistMapper = artistMapper;
-        this.artistService = artistService;
     }
 
     @Override
     public ArtistDTO save(ArtistDTO artistDTO) {
         log.debug("Request to save Artist : {}", artistDTO);
         Artist artist = artistMapper.toEntity(artistDTO);
-        artistService.setUploadPendingStatus(artist);
+        artist.setStatus(Status.UPLOAD_PENDING);
+
         artist = artistRepository.save(artist);
         return artistMapper.toDto(artist);
     }
@@ -49,7 +46,7 @@ public class ArtistUsecaseImpl implements ArtistUsecase {
     public ArtistDTO update(ArtistDTO artistDTO) {
         log.debug("Request to update Artist : {}", artistDTO);
         Artist artist = artistMapper.toEntity(artistDTO);
-        artistService.setRevisionPendingStatus(artist);
+        artist.setStatus(Status.REVISION_PENDING);
         artist = artistRepository.save(artist);
         return artistMapper.toDto(artist);
     }
@@ -93,7 +90,7 @@ public class ArtistUsecaseImpl implements ArtistUsecase {
     public ArtistDTO deletePending(ArtistDTO artistDTO) {
         log.debug("Request to delete pending Artist : {}", artistDTO);
         Artist artist = artistMapper.toEntity(artistDTO);
-        artistService.setDeletePendingStatus(artist);
+        artist.setStatus(Status.DELETE_PENDING);
         artist = artistRepository.save(artist);
         return artistMapper.toDto(artist);
     }
@@ -127,7 +124,7 @@ public class ArtistUsecaseImpl implements ArtistUsecase {
         log.debug("Request to authorize ok artist : {}", id);
         return artistRepository.findById(id)
             .map(artist -> {
-                artistService.setOkStatus(artist);
+                artist.setStatus(Status.OK);
                 return artistMapper.toDto(artistRepository.save(artist));
             })
             .orElseThrow();

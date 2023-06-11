@@ -1,4 +1,4 @@
-package com.artbridge.artist.application.usecase;
+package com.artbridge.artist.application.service;
 
 import com.artbridge.artist.domain.model.View;
 import com.artbridge.artist.application.dto.ViewDTO;
@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 /**
  * Service Interface for managing {@link View}.
  */
-public interface ViewUsecase {
+public interface ViewService {
     /**
      * Save a view.
      *
