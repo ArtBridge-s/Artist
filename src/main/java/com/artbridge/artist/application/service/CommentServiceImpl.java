@@ -39,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
         log.debug("Request to save Comment : {}", commentDTO);
         Comment comment = commentMapper.toEntity(commentDTO);
 
-        this.memberProducer.requestMemberName(comment.getMemberId());
+//        this.memberProducer.requestMemberName(comment.getMemberId());
         comment = commentRepository.save(comment);
         return commentMapper.toDto(comment);
     }
