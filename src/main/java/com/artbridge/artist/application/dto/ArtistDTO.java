@@ -15,6 +15,7 @@ public class ArtistDTO implements Serializable {
 
     private Long id;
     private String name;
+    private String info;
     private String realName;
     private String imgUrl;
     private String phone;

@@ -38,6 +38,9 @@ public class Artist implements Serializable {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "info", length = 4000)
+    private String info;
+
     @Column(name = "real_name")
     private String realName;
 
