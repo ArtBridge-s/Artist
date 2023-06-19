@@ -14,5 +14,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ArtistRepository extends JpaRepository<Artist, Long> {
 
-    Page<Artist> findAllByStatus(Pageable pageable, Status status);
+    Page<Artist> findAllByStatusOrderByIdDesc(Pageable pageable, Status status);
 }
