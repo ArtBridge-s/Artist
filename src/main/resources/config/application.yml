@@ -123,6 +123,25 @@ management:
             enabled: true
 
 spring:
+  kafka:
+    properties:
+      sasl:
+        mechanism: PLAIN
+        jaas:
+          config: org.apache.kafka.common.security.plain.PlainLoginModule required username='MTZ7I7OR5RB47K5T' password='D6idTRwM5PBI/0sQ1w2TsnQXGiijgtcEW+9/asnVRj5VxtN8fndyNeyAaGq9h03v';
+      bootstrap:
+        servers: pkc-n3603.us-central1.gcp.confluent.cloud:9092
+      security:
+        protocol: SASL_SSL
+      session:
+        timeout.ms: 45000
+      basic:
+        auth:
+          credentials:
+            source: USER_INFO
+          user.info: X6CBYNSBTHQVJP6V:c/LFY1cuY7fIzDldOjd5TgFa+ohwkrmCWT0CLXb1BsRdkNYMJhJ0P/iR2AZvtrRm
+        # Confluent Cloud Schema Registry의 엔드포인트 URL 설정
+  #        schema.registry.url: "https://{{ SR_ENDPOINT }}"
   autoconfigure:
     exclude: org.springframework.boot.actuate.autoconfigure.metrics.jdbc.DataSourcePoolMetricsAutoConfiguration
   application:
@@ -134,21 +153,21 @@ spring:
         credentials:
           location: classpath:config/artbridge-234c412b01cf.json
         bucket: artbridge-bucket
-    stream:
-      kafka:
-        binder:
-          replicationFactor: 1
-          auto-create-topics: true
-          brokers: localhost:9092
-      bindings:
-        binding-in-sse:
-          destination: sse-topic
-          content-type: text/plain
-          group: artist
-        binding-out-sse:
-          destination: sse-topic
-          content-type: text/plain
-          group: artist
+  #    stream:
+  #      kafka:
+  #        binder:
+  #          replicationFactor: 1
+  #          auto-create-topics: true
+  #          brokers: localhost:9092
+  #      bindings:
+  #        binding-in-sse:
+  #          destination: sse-topic
+  #          content-type: text/plain
+  #          group: artist
+  #        binding-out-sse:
+  #          destination: sse-topic
+  #          content-type: text/plain
+  #          group: artist
   profiles:
     # The commented value for `active` can be replaced with valid Spring profiles to load.
     # Otherwise, it will be filled in by maven when building the JAR file
