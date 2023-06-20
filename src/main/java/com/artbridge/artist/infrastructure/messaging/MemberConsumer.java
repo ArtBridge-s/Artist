@@ -1,6 +1,7 @@
 package com.artbridge.artist.infrastructure.messaging;
 
 import com.artbridge.artist.application.service.ArtistService;
+import com.artbridge.artist.application.service.CommentService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,11 +17,13 @@ import java.util.Map;
 public class MemberConsumer {
 
     private final ArtistService artistService;
+    private final CommentService commentService;
 
     private static final String TOPIC_MEMBER_NAME_REQUEST = "member-name";
 
-    public MemberConsumer(ArtistService artistService) {
+    public MemberConsumer(ArtistService artistService, CommentService commentService) {
         this.artistService = artistService;
+        this.commentService = commentService;
     }
 
 
@@ -39,6 +42,7 @@ public class MemberConsumer {
         }
 
         artistService.modifyMemberName(Long.parseLong(map.get("id").toString()), map.get("name").toString());
+        commentService.modifyMemberName(Long.parseLong(map.get("id").toString()), map.get("name").toString());
         log.info("MemberNameRequestConsumer: {}", map.get("id"));
     }
 }

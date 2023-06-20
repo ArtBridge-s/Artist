@@ -65,4 +65,6 @@ public interface CommentService {
      * @return Page<CommentDTO> : 페이지에 해당하는 댓글 목록을 반환합니다.
      */
     Page<CommentDTO> findByArtistId(Pageable pageable, Long artistId);
+
+    void modifyMemberName(long id, String name);
 }

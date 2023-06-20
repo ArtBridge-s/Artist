@@ -39,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
         log.debug("Request to save Comment : {}", commentDTO);
         Comment comment = commentMapper.toEntity(commentDTO);
 
-//        this.memberProducer.requestMemberName(comment.getMemberId());
+        this.memberProducer.requestMemberName(comment.getMember().getId());
         comment = commentRepository.save(comment);
         return commentMapper.toDto(comment);
     }
@@ -91,5 +91,14 @@ public class CommentServiceImpl implements CommentService {
     public Page<CommentDTO> findByArtistId(Pageable pageable, Long artistId) {
         log.debug("Request to get all Comments");
         return commentRepository.findByArtist_Id(pageable, artistId).map(commentMapper::toDto);
+    }
+
+    @Override
+    public void modifyMemberName(long id, String name) {
+        log.debug("Request to modify member name : {}", id);
+        commentRepository.findCommentsByMember_Id(id).forEach(comment -> {
+            comment.setMemberName(name);
+            commentRepository.save(comment);
+        });
     }
 }
