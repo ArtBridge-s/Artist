@@ -6,6 +6,7 @@ import com.artbridge.artist.application.dto.ArtistDTO;
 import com.artbridge.artist.application.mapper.ArtistMapper;
 import java.util.Optional;
 
+import com.artbridge.artist.infrastructure.messaging.MemberProducer;
 import com.artbridge.artist.infrastructure.repository.ArtistRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,9 +28,12 @@ public class ArtistServiceImpl implements ArtistService {
 
     private final ArtistMapper artistMapper;
 
-    public ArtistServiceImpl(ArtistRepository artistRepository, ArtistMapper artistMapper) {
+    private final MemberProducer memberProducer;
+
+    public ArtistServiceImpl(ArtistRepository artistRepository, ArtistMapper artistMapper, MemberProducer memberProducer) {
         this.artistRepository = artistRepository;
         this.artistMapper = artistMapper;
+        this.memberProducer = memberProducer;
     }
 
     @Override
@@ -37,6 +41,8 @@ public class ArtistServiceImpl implements ArtistService {
         log.debug("Request to save Artist : {}", artistDTO);
         Artist artist = artistMapper.toEntity(artistDTO);
         artist.setStatus(Status.UPLOAD_PENDING);
+
+        memberProducer.requestMemberName(artist.getCreatedMember().getId());
 
         artist = artistRepository.save(artist);
         return artistMapper.toDto(artist);
@@ -129,6 +135,16 @@ public class ArtistServiceImpl implements ArtistService {
             })
             .orElseThrow();
     }
+
+    @Override
+    public void modifyMemberName(long id, String name) {
+        log.debug("Request to modify member name : {}", id);
+        artistRepository.findAllByCreatedMemberId(id).forEach(artist -> {
+            artist.setCreatedMemberName(name);
+            artistRepository.save(artist);
+        });
+    }
+
 
 
 }
