@@ -108,4 +108,6 @@ public interface ArtistService {
      * @return 변경된 아티스트 정보 (ArtistDTO)
      */
     ArtistDTO authorizeOkArtist(Long id);
+
+    void modifyMemberName(long id, String name);
 }

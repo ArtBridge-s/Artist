@@ -214,4 +214,8 @@ public class Artist implements Serializable {
     public int hashCode() {
         return getClass().hashCode();
     }
+
+    public void setCreatedMemberName(String name) {
+        this.createdMember.setName(name);
+    }
 }
