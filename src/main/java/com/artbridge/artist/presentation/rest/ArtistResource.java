@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -166,7 +167,7 @@ public class ArtistResource {
      * @return 페이지별로 조회된 아티스트 정보를 담은 ResponseEntity 객체
      */
     @GetMapping("/artists")
-    public ResponseEntity<List<ArtistDTO>> getAllArtists(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<ArtistDTO>> getAllArtists(@ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Artists");
         Page<ArtistDTO> page = artistService.findAllByStatus(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -196,7 +197,7 @@ public class ArtistResource {
      */
     @GetMapping("/artists/pending/creates")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<List<ArtistDTO>> getCreatePendings(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<ArtistDTO>> getCreatePendings(@ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Artists");
         Page<ArtistDTO> page = artistService.findCreatePendings(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -212,7 +213,7 @@ public class ArtistResource {
      */
     @GetMapping("/artists/pending/updates")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<List<ArtistDTO>> getUpdatePendings(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<ArtistDTO>> getUpdatePendings(@ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Artists");
         Page<ArtistDTO> page = artistService.findUpdatePendings(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -228,7 +229,7 @@ public class ArtistResource {
      */
     @GetMapping("/artists/pending/deletes")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<List<ArtistDTO>> getDeletePendings(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<ArtistDTO>> getDeletePendings(@ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Artists");
         Page<ArtistDTO> page = artistService.findDeletePendings(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
